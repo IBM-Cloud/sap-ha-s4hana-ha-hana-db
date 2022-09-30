@@ -1,4 +1,4 @@
-# Automation scripts for HA S/4HANA SAP-COE project
+# Automation scripts for HA S/4HANA project
 
 ## Steps to reproduce:
 
