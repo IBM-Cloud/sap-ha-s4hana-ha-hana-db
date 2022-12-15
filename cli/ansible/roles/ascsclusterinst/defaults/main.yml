@@ -1,0 +1,8 @@
+---
+#Sapinst product-id
+sap_product_id: "NW_ABAP_ASCS:S4HANA2020.CORE.HDB.ABAPHA"
+sapusers_product_id: "NW_Users"
+
+#Target files location
+sap_kit: "/usr/sap/kit"
+...
