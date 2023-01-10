@@ -17,3 +17,15 @@ output "SAP-APP-PRIVATE-IP-VSI2" {
 output "DOMAIN-NAME" {
   value = var.DOMAIN_NAME
 }
+
+output FQDN-ALB-ASCS {
+ value		= "${data.ibm_is_lb.alb-ascs.hostname}" 
+}
+
+output FQDN-ALB-ERS {
+ value		= "${data.ibm_is_lb.alb-ers.hostname}"
+}
+
+output FQDN-ALB-HANA {
+ value		= "${data.ibm_is_lb.alb-hana.hostname}"
+}
