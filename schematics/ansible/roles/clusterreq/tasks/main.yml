@@ -1,0 +1,45 @@
+---
+- name: Import required cluster packages
+  package:
+    state: present
+    name: "{{ cluster_required_packages }}"
+
+- name: Set the password for hacluster
+  user:
+    name: hacluster
+    update_password: always
+    password: "{{ ha_password | password_hash('sha512') }}"
+
+- name: Enable pacemaker service
+  systemd:
+    name: pcsd.service
+    state: started
+    enabled: yes
+
+- name: Enable hostname resolve to other cluster nodes
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ hostname }}"
+  loop: 
+    - "{{ app_iphost1 }} {{ app_hostname1 }}.{{ domain_name }} {{ app_hostname1 }}"
+    - "{{ app_iphost2 }} {{ app_hostname2 }}.{{ domain_name }} {{ app_hostname2 }}"
+    - "{{ hdb_iphost1 }} {{ hdb_hostname1 }}.{{ domain_name }} {{ hdb_hostname1 }}"
+    - "{{ hdb_iphost2 }} {{ hdb_hostname2 }}.{{ domain_name }} {{ hdb_hostname2 }}"
+  loop_control:
+    loop_var: hostname
+
+- name: Configure resolv.conf
+  lineinfile:
+    path: /etc/resolv.conf
+    line: "search {{ domain_name }}"
+
+- name: Add the domain name to network interface config
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    line: "DOMAIN=\"{{ domain_name }}\""
+
+- name: Restart the network service
+  systemd:
+    name: NetworkManager.service
+    state: restarted
+...

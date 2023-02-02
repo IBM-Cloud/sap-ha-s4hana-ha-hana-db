@@ -1,0 +1,40 @@
+---
+- name: Create /usr/sap/kit directory
+  file:
+    path: "{{ sap_kit }}"
+    state: directory
+    mode: 0777
+
+- name: Create "{{ sap_kit }}"/swpm directory
+  file:
+    path: "{{ sap_kit }}/swpm"
+    state: directory
+    mode: 0777
+
+- name: Copy "{{ kit_sapcar_file }}" kit to target
+  copy:
+    src: "{{ kit_sapcar_file }}"
+    dest: "{{ sap_kit }}/sapcar"
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Copy "{{ kit_swpm_file }}" kit to target
+  copy:
+    src: "{{ kit_swpm_file }}"
+    dest: "{{ sap_kit }}/swpm.sar"
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Copy "{{ kit_saphotagent_file }}" kit to target
+  copy:
+    src: "{{ kit_saphotagent_file }}"
+    dest: "{{ sap_kit }}/saphotagent.sar"
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Extract SWPM archive
+  command: "{{ sap_kit }}/sapcar -xf {{ sap_kit }}/swpm.sar -R {{ sap_kit }}/swpm"
+...

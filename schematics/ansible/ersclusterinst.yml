@@ -1,0 +1,15 @@
+---
+- hosts: app_iphost2
+  gather_facts: true
+  pre_tasks:
+    - name: Import playbook variables
+      include_vars: "{{ item }}"
+      loop:
+        - "saps4app-vars.yml"
+        - "fileshares-vars.yml"
+        - "hainfra-vars.yml"
+        - "dns-vars.yml"
+
+  roles:
+    - ersclusterinst
+...

@@ -1,0 +1,7 @@
+---
+#Disk size config
+swap_disk_size: "40.00 GB"
+
+#Logical volume size config
+swap_lv_size: "30g"
+...

@@ -1,0 +1,25 @@
+---
+- name: Configure cluster authentication
+  shell: |
+    pcs host auth {{ hdb_hostname1 }} {{ hdb_hostname2 }} -u hacluster -p {{ ha_password }}
+
+- name: Cluster setup
+  shell: |
+    pcs cluster setup ha-hdb {{ hdb_hostname1 }} {{ hdb_hostname2 }} totem token=30000
+
+- name: Cluster startup
+  shell: |
+    pcs cluster start --all
+
+- name: Cluster parameters
+  shell: |
+    pcs resource defaults update resource-stickiness=1000
+    pcs resource defaults update migration-threshold=5000
+
+- name: Configure fencing agent
+  shell: |
+    pcs stonith create ha-hdb-fa fence_ibm_vpc apikey={{ api_key }} \
+    limit=1 region={{ region }} pcmk_reboot_action=off \
+    pcmk_host_map='{{ hdb_hostname1 }}:{{ hdb_instanceid1 }};{{ hdb_hostname2 }}:{{ hdb_instanceid2 }}' \
+    verbose=1 op monitor interval=900s
+...
