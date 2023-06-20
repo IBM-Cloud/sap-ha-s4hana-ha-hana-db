@@ -133,7 +133,7 @@ DB-HOSTNAME-2 = "hanadb-2"
 DB-PROFILE = "mx2-16x128"
 # The DB VSI profile. Supported profiles for DB VSI: mx2-16x128. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
-DB-IMAGE = "ibm-redhat-8-4-amd64-sap-hana-4"
+DB-IMAGE = "ibm-redhat-8-6-amd64-sap-hana-2"
 # OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-4-amd64-sap-hana-4
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
 # Example: DB-IMAGE = "ibm-redhat-8-4-amd64-sap-hana-4" 
@@ -154,7 +154,7 @@ APP-HOSTNAME-2 = "sapapp-2"
 APP-PROFILE = "bx2-4x16"
 # The APP VSI profile. Supported profiles: bx2-4x16. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
-APP-IMAGE = "ibm-redhat-8-4-amd64-sap-hana-4"
+APP-IMAGE = "ibm-redhat-8-6-amd64-sap-hana-2"
 # OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-4-amd64-sap-hana-4.
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
 # Example: APP-IMAGE = "ibm-redhat-8-4-amd64-sap-hana-4" 
@@ -200,9 +200,7 @@ hana_components = "server"
 
 kit_saphana_file = "/storage/HANADB/51055299.ZIP"
 # SAP HANA Installation kit path
-# Supported SAP HANA versions on Red Hat 8.4 and Suse 15.3: HANA 2.0 SP 5 Rev 57, kit file: 51055299.ZIP
-# Supported SAP HANA versions on Red Hat 7.6: HANA 2.0 SP 5 Rev 52, kit file: 51054623.ZIP
-# Example for Red Hat 7: kit_saphana_file = "/storage/HANADB/51054623.ZIP"
+# Supported SAP HANA versions on Red Hat 8.4, 8.6 and Suse 15.3, 15.4: HANA 2.0 SP 5 Rev 57, kit file: 51055299.ZIP
 # Example for Red Hat 8 or Suse 15: kit_saphana_file = "/storage/HANADB/51055299.ZIP"
 
 ##########################################################

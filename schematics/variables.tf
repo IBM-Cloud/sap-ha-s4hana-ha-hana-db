@@ -151,7 +151,7 @@ variable "DB-PROFILE" {
 variable "DB-IMAGE" {
 	type		= string
 	description = "DB VSI OS Image"
-	default		= "ibm-redhat-8-4-amd64-sap-hana-4"
+	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
 }
 
 variable "DB-HOSTNAME-1" {
@@ -192,7 +192,7 @@ variable "APP-PROFILE" {
 variable "APP-IMAGE" {
 	type		= string
 	description = "VSI OS Image"
-	default		= "ibm-redhat-8-4-amd64-sap-hana-4"
+	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
 }
 
 variable "APP-HOSTNAME-1" {
@@ -278,7 +278,7 @@ data "ibm_resource_group" "group" {
 }
 
 variable "share_profile" {
-  description = "Enter the IOPs (IOPS per GB) tier for File Share storage. Valid values are 3, 5, and 10."
+  description = "Enter the IOPs (IOPS per GB) tier for File Share storage. Valid values are: dp2, tier-3iops, tier-5iops, tier-10iops."
   type        = string
   default     = "tier-5iops"
 }

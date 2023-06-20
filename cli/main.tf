@@ -63,34 +63,60 @@ module "app-vsi" {
   FINAL-DEFAULT-HOSTNAME = lower ("${each.value.APP-HOSTNAME-DEFAULT}")
 }
 
-
 module "file-shares" {
   depends_on	= [ module.vpc-subnet , module.pg ]
   source		= "./modules/file-shares"
   for_each = {
-  "usrsap-as1" = {size = var.usrsap-as1 , var_name = "as1" }
-  "usrsap-as2" = {size = var.usrsap-as2 , var_name = "as2" }
-  "usrsap-sapascs" = {size = var.usrsap-sapascs , var_name = "sapascs" }
-  "usrsap-sapers" = {size = var.usrsap-sapers , var_name = "sapers" }
-  "usrsap-sapmnt" = {size = var.usrsap-sapmnt , var_name = "sapmnt" }
-  "usrsap-sapsys" = {size = var.usrsap-sapsys , var_name = "sapsys" }
-  "usrsap-trans" = {size = var.usrsap-trans , var_name = "trans" }
+  "usrsap-as1" = {size = var.usrsap-as1 , var_name = "as1", var_timeout = "1m" }
+  "usrsap-as2" = {size = var.usrsap-as2 , var_name = "as2" , var_timeout = "2m"}
+  "usrsap-sapascs" = {size = var.usrsap-sapascs , var_name = "sapascs", var_timeout = "3m" }
+  "usrsap-sapers" = {size = var.usrsap-sapers , var_name = "sapers", var_timeout = "4m" }
+  "usrsap-sapmnt" = {size = var.usrsap-sapmnt , var_name = "sapmnt", var_timeout = "5m" }
+  "usrsap-sapsys" = {size = var.usrsap-sapsys , var_name = "sapsys", var_timeout = "6m" }
+  "usrsap-trans" = {size = var.usrsap-trans , var_name = "trans" , var_timeout = "7m" }
   }
   api_key   = var.ibmcloud_api_key
-  resource_group_name   = data.ibm_resource_group.group.id
+  resource_group_id  = data.ibm_resource_group.group.id
   zone                  = var.ZONE
   prefix                = each.key
   ansible_var_name      = each.value.var_name
+  var_timeout           = each.value.var_timeout
   vpc_id                = data.ibm_is_vpc.vpc.id
+  vpc			              = var.VPC
   region                = var.REGION
-  enable_file_share     = true
   share_size            = each.value.size
   share_profile         = var.share_profile
-  SAP_SID = var.sap_sid
+  sap_sid               = var.sap_sid
+}
+
+module "file-shares-cleaning-up" {
+  depends_on	= [ module.file-shares ]
+  source		= "./modules/file-shares/cleaning-up"
+  for_each = {
+  "usrsap-as1" = {size = var.usrsap-as1 , var_name = "as1", var_timeout = "1m" }
+  "usrsap-as2" = {size = var.usrsap-as2 , var_name = "as2" , var_timeout = "3m"}
+  "usrsap-sapascs" = {size = var.usrsap-sapascs , var_name = "sapascs", var_timeout = "5m" }
+  "usrsap-sapers" = {size = var.usrsap-sapers , var_name = "sapers", var_timeout = "7m" }
+  "usrsap-sapmnt" = {size = var.usrsap-sapmnt , var_name = "sapmnt", var_timeout = "9m" }
+  "usrsap-sapsys" = {size = var.usrsap-sapsys , var_name = "sapsys", var_timeout = "11m" }
+  "usrsap-trans" = {size = var.usrsap-trans , var_name = "trans" , var_timeout = "13m" }
+  }
+  api_key   = var.ibmcloud_api_key
+  resource_group_id  = data.ibm_resource_group.group.id
+  zone                  = var.ZONE
+  prefix                = each.key
+  ansible_var_name      = each.value.var_name
+  var_timeout           = each.value.var_timeout
+  vpc_id                = data.ibm_is_vpc.vpc.id
+  vpc			              = var.VPC
+  region                = var.REGION
+  share_size            = each.value.size
+  share_profile         = var.share_profile
+  sap_sid               = var.sap_sid
 }
 
 module "alb-prereq" {
-  depends_on	= [ module.file-shares ]
+  depends_on	= [ module.file-shares-cleaning-up ]
   source		= "./modules/alb/prereq"
 
   for_each ={
@@ -211,7 +237,7 @@ module "alb-hana" {
 }
 
 module "dns"  {
-    depends_on	= [ module.alb-hana ]
+    depends_on	= [ module.alb-hana , module.file-shares-cleaning-up ]
     source		= "./modules/dns"
     ZONE			= var.ZONE
     REGION  = var.REGION
@@ -229,7 +255,7 @@ module "dns"  {
 
 module "s4pasreq" {
   source		= "./modules/ansible-exec"
-  depends_on	= [ module.app-vsi, local_file.ha_ansible_infra-vars, local_file.app_ansible_saps4app-vars, local_file.db_ansible_saphana-vars, module.file-shares, module.dns ]
+  depends_on	= [ module.app-vsi, local_file.ha_ansible_infra-vars, local_file.app_ansible_saps4app-vars, local_file.db_ansible_saphana-vars, module.file-shares-cleaning-up , module.dns ]
   IP1			= data.ibm_is_instance.app-vsi-1.primary_network_interface[0].primary_ip[0].address
   PLAYBOOK_PATH = "ansible/s4pasreq.yml"
 }

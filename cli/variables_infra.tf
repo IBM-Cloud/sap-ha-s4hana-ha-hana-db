@@ -142,7 +142,7 @@ variable "DB-PROFILE" {
 variable "DB-IMAGE" {
 	type		= string
 	description = "DB VSI OS Image"
-	default		= "ibm-redhat-8-4-amd64-sap-hana-4"
+	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
 }
 
 variable "DB-HOSTNAME-1" {
@@ -183,7 +183,7 @@ variable "APP-PROFILE" {
 variable "APP-IMAGE" {
 	type		= string
 	description = "VSI OS Image"
-	default		= "ibm-redhat-8-4-amd64-sap-hana-4"
+	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
 }
 
 variable "APP-HOSTNAME-1" {

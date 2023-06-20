@@ -52,12 +52,6 @@ variable "usrsap-trans" {
   default = 80
 }
 
-variable "enable_file_share" {
-  description = "This creates File Share storage for the App Tier to support stateful use case. Select true or false."
-  type        = bool
-  default     = false
-}
-
 variable "share_size" {
   description = "File Share storage size in GB. Value should be in between 10 and 32000."
   type        = number
@@ -65,7 +59,7 @@ variable "share_size" {
 }
 
 variable "share_profile" {
-  description = "Enter the IOPs (IOPS per GB) tier for File Share storage. Valid values are 3, 5, and 10."
+  description = "Enter the IOPs (IOPS per GB) tier for File Share storage. Valid values are: dp2, tier-3iops, tier-5iops, tier-10iops."
   type        = string
   default     = "tier-5iops"
 }

@@ -29,15 +29,17 @@ variable "resource_group_id" {
   type        = string
 }
 
+/*
 data "local_file" "input" {
   depends_on = [ null_resource.create_file_share ]
   filename = "${path.module}/cache/mount_path.tmpl"
 }
+*/
 
 locals {
   share_name    = lower ("${var.prefix}-${var.sap_sid}")
   vpc_api_endpoint = "https://${var.region}.iaas.cloud.ibm.com"
-  mount_path =  chomp(data.local_file.input.content)
+#  mount_path =  chomp(data.local_file.input.content)
 }
 
 variable "sap_sid" {
