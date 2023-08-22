@@ -2,192 +2,192 @@
 # The variables and data sources used in SAP Ansible Modules.
 ##############################################################
 
-variable "hana_sid" {
+variable "HANA_SID" {
 	type		= string
-	description = "hana_sid"
+	description = "HANA_SID"
 	default		= "HDB"
 	validation {
-		condition     = length(regexall("^[a-zA-Z][a-zA-Z0-9][a-zA-Z0-9]$", var.hana_sid)) > 0
-		error_message = "The hana_sid is not valid."
+		condition     = length(regexall("^[a-zA-Z][a-zA-Z0-9][a-zA-Z0-9]$", var.HANA_SID)) > 0
+		error_message = "The HANA_SID is not valid."
 	}
 }
 
-variable "sap_ascs_instance_number" {
+variable "SAP_ASCS_INSTANCE_NUMBER" {
 	type		= string
-	description = "sap_ascs_instance_number"
+	description = "SAP_ASCS_INSTANCE_NUMBER"
 	default		= "00"
 	validation {
-		condition     = var.sap_ascs_instance_number >= 0 && var.sap_ascs_instance_number <=97
-		error_message = "The sap_ascs_instance_number is not valid."
+		condition     = var.SAP_ASCS_INSTANCE_NUMBER >= 0 && var.SAP_ASCS_INSTANCE_NUMBER <=97
+		error_message = "The SAP_ASCS_INSTANCE_NUMBER is not valid."
 	}
 }
 
-variable "sap_ers_instance_number" {
+variable "SAP_ERS_INSTANCE_NUMBER" {
 	type		= string
-	description = "sap_ers_instance_number"
+	description = "SAP_ERS_INSTANCE_NUMBER"
 	default		= "01"
 	validation {
-		condition     = var.sap_ers_instance_number >= 00 && var.sap_ers_instance_number <=99
-		error_message = "The sap_ers_instance_number is not valid."
+		condition     = var.SAP_ERS_INSTANCE_NUMBER >= 00 && var.SAP_ERS_INSTANCE_NUMBER <=99
+		error_message = "The SAP_ERS_INSTANCE_NUMBER is not valid."
 	}
 }
 
-variable "sap_ci_instance_number" {
+variable "SAP_CI_INSTANCE_NUMBER" {
 	type		= string
-	description = "sap_ci_instance_number"
+	description = "SAP_CI_INSTANCE_NUMBER"
 	default		= "10"
 	validation {
-		condition     = var.sap_ci_instance_number >= 00 && var.sap_ci_instance_number <=99
-		error_message = "The sap_ci_instance_number is not valid."
+		condition     = var.SAP_CI_INSTANCE_NUMBER >= 00 && var.SAP_CI_INSTANCE_NUMBER <=99
+		error_message = "The SAP_CI_INSTANCE_NUMBER is not valid."
 	}
 }
 
-variable "sap_aas_instance_number" {
+variable "SAP_AAS_INSTANCE_NUMBER" {
 	type		= string
-	description = "sap_aas_instance_number"
+	description = "SAP_AAS_INSTANCE_NUMBER"
 	default		= "20"
 	validation {
-		condition     = var.sap_aas_instance_number >= 00 && var.sap_aas_instance_number <=99
-		error_message = "The sap_aas_instance_number is not valid."
+		condition     = var.SAP_AAS_INSTANCE_NUMBER >= 00 && var.SAP_AAS_INSTANCE_NUMBER <=99
+		error_message = "The SAP_AAS_INSTANCE_NUMBER is not valid."
 	}
 }
 
-variable "hana_sysno" {
+variable "HANA_SYSNO" {
 	type		= string
-	description = "hana_sysno"
+	description = "HANA_SYSNO"
 	default		= "00"
 	validation {
-		condition     = var.hana_sysno >= 0 && var.hana_sysno <=97
-		error_message = "The hana_sysno is not valid."
+		condition     = var.HANA_SYSNO >= 0 && var.HANA_SYSNO <=97
+		error_message = "The HANA_SYSNO is not valid."
 	}
 }
 
-variable "hana_main_password" {
+variable "HANA_MAIN_PASSWORD" {
 	type		= string
 	sensitive = true
 	description = "HANADB main password"
 	validation {
-		condition     = length(regexall("^(.{0,7}|.{15,}|[^0-9a-zA-Z]*)$", var.hana_main_password)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z!@#$_]+$", var.hana_main_password)) > 0
-		error_message = "The hana_main_password is not valid."
+		condition     = length(regexall("^(.{0,7}|.{15,}|[^0-9a-zA-Z]*)$", var.HANA_MAIN_PASSWORD)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z!@#$_]+$", var.HANA_MAIN_PASSWORD)) > 0
+		error_message = "The HANA_MAIN_PASSWORD is not valid."
 	}
 }
 
-variable "hana_system_usage" {
+variable "HANA_SYSTEM_USAGE" {
 	type		= string
-	description = "hana_system_usage"
+	description = "HANA_SYSTEM_USAGE"
 	default		= "custom"
 	validation {
-		condition     = contains(["production", "test", "development", "custom" ], var.hana_system_usage )
-		error_message = "The hana_system_usage must be one of: production, test, development, custom."
+		condition     = contains(["production", "test", "development", "custom" ], var.HANA_SYSTEM_USAGE )
+		error_message = "The HANA_SYSTEM_USAGE must be one of: production, test, development, custom."
 	}
 }
 
-variable "hana_components" {
+variable "HANA_COMPONENTS" {
 	type		= string
-	description = "hana_components"
+	description = "HANA_COMPONENTS"
 	default		= "server"
 	validation {
-		condition     = contains(["all", "client", "es", "ets", "lcapps", "server", "smartda", "streaming", "rdsync", "xs", "studio", "afl", "sca", "sop", "eml", "rme", "rtl", "trp" ], var.hana_components )
-		error_message = "The hana_components must be one of: all, client, es, ets, lcapps, server, smartda, streaming, rdsync, xs, studio, afl, sca, sop, eml, rme, rtl, trp."
+		condition     = contains(["all", "client", "es", "ets", "lcapps", "server", "smartda", "streaming", "rdsync", "xs", "studio", "afl", "sca", "sop", "eml", "rme", "rtl", "trp" ], var.HANA_COMPONENTS )
+		error_message = "The HANA_COMPONENTS must be one of: all, client, es, ets, lcapps, server, smartda, streaming, rdsync, xs, studio, afl, sca, sop, eml, rme, rtl, trp."
 	}
 }
 
-variable "kit_saphana_file" {
+variable "KIT_SAPHANA_FILE" {
 	type		= string
-	description = "kit_saphana_file"
-	default		= "51054623.ZIP"
+	description = "KIT_SAPHANA_FILE"
+	default		= "51055299.ZIP"
 }
 
-variable "sap_sid" {
+variable "SAP_SID" {
 	type		= string
-	description = "sap_sid"
+	description = "SAP_SID"
 	default		= "S4A"
 	validation {
-		condition     = length(regexall("^[a-zA-Z][a-zA-Z0-9][a-zA-Z0-9]$", var.sap_sid)) > 0
-		error_message = "The sap_sid is not valid."
+		condition     = length(regexall("^[a-zA-Z][a-zA-Z0-9][a-zA-Z0-9]$", var.SAP_SID)) > 0
+		error_message = "The SAP_SID is not valid."
 	}
 }
 
-variable "sap_main_password" {
+variable "SAP_MAIN_PASSWORD" {
 	type		= string
 	sensitive = true
 	description = "SAP main password"
 	validation {
-		condition     = length(regexall("^(.{0,9}|.{15,}|[^0-9]*)$", var.sap_main_password)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z@#$_]+$", var.sap_main_password)) > 0
-		error_message = "The sap_main_password is not valid."
+		condition     = length(regexall("^(.{0,9}|.{15,}|[^0-9]*)$", var.SAP_MAIN_PASSWORD)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z@#$_]+$", var.SAP_MAIN_PASSWORD)) > 0
+		error_message = "The SAP_MAIN_PASSWORD is not valid."
 	}
 }
 
-variable "ha_password" {
+variable "HA_PASSWORD" {
 	type		= string
 	sensitive = true
 	description = "HA cluster password"
 	validation {
-		condition     = length(regexall("^(.{0,9}|.{15,}|[^0-9]*)$", var.ha_password)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z@#$_]+$", var.ha_password)) > 0
-		error_message = "The ha_password is not valid."
+		condition     = length(regexall("^(.{0,9}|.{15,}|[^0-9]*)$", var.HA_PASSWORD)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z@#$_]+$", var.HA_PASSWORD)) > 0
+		error_message = "The HA_PASSWORD is not valid."
 	}
 }
 
-variable "hdb_concurrent_jobs" {
+variable "HDB_CONCURRENT_JOBS" {
 	type		= string
-	description = "hdb_concurrent_jobs"
+	description = "HDB_CONCURRENT_JOBS"
 	default		= "23"
 	validation {
-		condition     = var.hdb_concurrent_jobs >= 1 && var.hdb_concurrent_jobs <=25
-		error_message = "The hdb_concurrent_jobs is not valid."
+		condition     = var.HDB_CONCURRENT_JOBS >= 1 && var.HDB_CONCURRENT_JOBS <=25
+		error_message = "The HDB_CONCURRENT_JOBS is not valid."
 	}
 }
 
-variable "kit_sapcar_file" {
+variable "KIT_SAPCAR_FILE" {
 	type		= string
-	description = "kit_sapcar_file"
+	description = "KIT_SAPCAR_FILE"
 	default		= "SAPCAR_1010-70006178.EXE"
 }
 
-variable "kit_swpm_file" {
+variable "KIT_SWPM_FILE" {
 	type		= string
-	description = "kit_swpm_file"
+	description = "KIT_SWPM_FILE"
 	default		= "SWPM20SP09_4-80003424.SAR"
 }
 
-variable "kit_sapexe_file" {
+variable "KIT_SAPEXE_FILE" {
 	type		= string
-	description = "kit_sapexe_file"
+	description = "KIT_SAPEXE_FILE"
 	default		= "SAPEXE_100-70005283.SAR"
 }
 
-variable "kit_sapexedb_file" {
+variable "KIT_SAPEXEDB_FILE" {
 	type		= string
-	description = "kit_sapexedb_file"
+	description = "KIT_SAPEXEDB_FILE"
 	default		= "SAPEXEDB_100-70005282.SAR"
 }
 
-variable "kit_igsexe_file" {
+variable "KIT_IGSEXE_FILE" {
 	type		= string
-	description = "kit_igsexe_file"
+	description = "KIT_IGSEXE_FILE"
 	default		= "igsexe_1-70005417.sar"
 }
 
-variable "kit_igshelper_file" {
+variable "KIT_IGSHELPER_FILE" {
 	type		= string
-	description = "kit_igshelper_file"
+	description = "KIT_IGSHELPER_FILE"
 	default		= "igshelper_17-10010245.sar"
 }
 
-variable "kit_saphotagent_file" {
+variable "KIT_SAPHOSTAGENT_FILE" {
 	type		= string
-	description = "kit_saphotagent_file"
+	description = "KIT_SAPHOSTAGENT_FILE"
 	default		= "SAPHOSTAGENT51_51-20009394.SAR"
 }
 
-variable "kit_hdbclient_file" {
+variable "KIT_HDBCLIENT_FILE" {
 	type		= string
-	description = "kit_hdbclient_file"
+	description = "KIT_HDBCLIENT_FILE"
 	default		= "IMDB_CLIENT20_009_28-80002082.SAR"
 }
 
-variable "kit_s4hana_export" {
+variable "KIT_S4HANA_EXPORT" {
 	type		= string
-	description = "kit_s4hana_export"
+	description = "KIT_S4HANA_EXPORT"
 	default		= "/S4HANA/export"
 }

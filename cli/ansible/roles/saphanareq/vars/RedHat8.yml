@@ -42,6 +42,7 @@ saphana_required_configurations:
   - "umask_RHEL"
   - "kernel_RedHat8"
   - "filesystems"
+  - "tmpfs"
   - "tuned"
   - "SELinux"
   - "firewalld"

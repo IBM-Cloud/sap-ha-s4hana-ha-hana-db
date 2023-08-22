@@ -10,56 +10,50 @@ data "ibm_resource_group" "group" {
   name		= var.RESOURCE_GROUP
 }
 
-variable "usrsap-as1" {
-  description = "Resource usrsap-as1"
+variable "USRSAP_AS1" {
+  description = "Resource USRSAP-AS1"
   type        = number
   default = 20
 }
 
-variable "usrsap-as2" {
-  description = "Resource usrsap-as2"
+variable "USRSAP_AS2" {
+  description = "Resource USRSAP-AS2"
   type        = number
   default = 20
 }
 
-variable "usrsap-sapascs" {
-  description = "Resource usrsap-sapascs"
+variable "USRSAP_SAPASCS" {
+  description = "Resource USRSAP-SAPASCS"
   type        = number
   default = 20
 }
 
-variable "usrsap-sapers" {
-  description = "Resource usrsap-sapers"
+variable "USRSAP_SAPERS" {
+  description = "Resource USRSAP-SAPERS"
   type        = number
   default = 20
 }
 
-variable "usrsap-sapmnt" {
-  description = "Resource usrsap-sapmnt"
+variable "USRSAP_SAPMNT" {
+  description = "Resource USRSAP-SAPMNT"
   type        = number
   default = 20
 }
 
-variable "usrsap-sapsys" {
-  description = "Resource usrsap-sapsys"
+variable "USRSAP_SAPSYS" {
+  description = "Resource USRSAP-SAPSYS"
   type        = number
   default = 20
 }
 
-variable "usrsap-trans" {
-  description = "Resource usrsap-trans"
+variable "USRSAP_TRANS" {
+  description = "Resource USRSAP-TRANS"
   type        = number
   default = 80
 }
 
-variable "share_size" {
-  description = "File Share storage size in GB. Value should be in between 10 and 32000."
-  type        = number
-  default     = 20
-}
-
-variable "share_profile" {
-  description = "Enter the IOPs (IOPS per GB) tier for File Share storage. Valid values are: dp2, tier-3iops, tier-5iops, tier-10iops."
+variable "SHARE_PROFILE" {
+  description = "The File Share profile Storage."
   type        = string
-  default     = "tier-5iops"
+  default     = "dp2"
 }

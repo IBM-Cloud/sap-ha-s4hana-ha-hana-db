@@ -2,14 +2,14 @@
 # The variables and data sources used in VPC infra Modules. 
 ############################################################
 
-variable "private_ssh_key" {
+variable "PRIVATE_SSH_KEY" {
 	type		= string
-	description = "Input id_rsa private key content"
+	description = "Input id_rsa private key content (Sensitive* value)."
 }
 
 variable "SSH_KEYS" {
 	type		= list(string)
-	description = "IBM Cloud SSH Keys ID list to access the VSIs"
+	description = "List of SSH Keys UUIDs that are allowed to SSH as root to the VSI. Can contain one or more IDs. The list of SSH Keys is available here: https://cloud.ibm.com/vpc-ext/compute/sshKeys."
 	validation {
 		condition     = var.SSH_KEYS == [] ? false : true && var.SSH_KEYS == [""] ? false : true
 		error_message = "At least one SSH KEY is needed to be able to access the VSI."
@@ -18,18 +18,18 @@ variable "SSH_KEYS" {
 
 variable "BASTION_FLOATING_IP" {
 	type		= string
-	description = "Input the FLOATING IP from the Bastion Server"
+	description = "Input the FLOATING IP from the Bastion Server."
 }
 
 variable "RESOURCE_GROUP" {
   type        = string
-  description = "EXISTING Resource Group for VPC Resources and File Shares"
+  description = "The name of an EXISTING Resource Group for VSIs and Volumes resources. Default value: \"Default\". The list of Resource Groups is available here: https://cloud.ibm.com/account/resource-groups."
   default     = "Default"
 }
 
 variable "REGION" {
 	type		= string
-	description	= "Cloud Region"
+	description	= "The cloud region where to deploy the solution. The regions and zones for VPC are listed here:https://cloud.ibm.com/docs/containers?topic=containers-regions-and-zones#zones-vpc. Review supported locations in IBM Cloud Schematics here: https://cloud.ibm.com/docs/schematics?topic=schematics-locations."
 	validation {
 		condition     = contains(["eu-de", "eu-gb", "us-south", "us-east"], var.REGION )
 		error_message = "The REGION must be one of: eu-de, eu-gb, us-south, us-east."
@@ -38,7 +38,7 @@ variable "REGION" {
 
 variable "ZONE" {
 	type		= string
-	description	= "Cloud Zone"
+	description	= "The cloud zone where to deploy the solution."
 	validation {
 		condition     = length(regexall("^(eu-de|eu-gb|us-south|us-east)-(1|2|3)$", var.ZONE)) > 0
 		error_message = "The ZONE is not valid."
@@ -47,7 +47,7 @@ variable "ZONE" {
 
 variable "VPC" {
 	type		= string
-	description = "EXISTING VPC name"
+	description = "The name of an EXISTING VPC. The list of VPCs is available here: https://cloud.ibm.com/vpc-ext/network/vpcs."
 	validation {
 		condition     = length(regexall("^([a-z]|[a-z][-a-z0-9]*[a-z0-9]|[0-9][-a-z0-9]*([a-z]|[-a-z][-a-z0-9]*[a-z0-9]))$", var.VPC)) > 0
 		error_message = "The VPC name is not valid."
@@ -56,7 +56,7 @@ variable "VPC" {
 
 variable "SUBNET" {
 	type		= string
-	description = "EXISTING Subnet name"
+	description = "The name of an EXISTING Subnet. The list of Subnets is available here: https://cloud.ibm.com/vpc-ext/network/subnets."
 	validation {
 		condition     = length(regexall("^([a-z]|[a-z][-a-z0-9]*[a-z0-9]|[0-9][-a-z0-9]*([a-z]|[-a-z][-a-z0-9]*[a-z0-9]))$", var.SUBNET)) > 0
 		error_message = "The SUBNET name is not valid."
@@ -65,7 +65,7 @@ variable "SUBNET" {
 
 variable "SECURITY_GROUP" {
 	type		= string
-	description = "EXISTING Security group name"
+	description = "The name of an EXISTING Security group. The list of Security Groups is available here: https://cloud.ibm.com/vpc-ext/network/securityGroups."
 	validation {
 		condition     = length(regexall("^([a-z]|[a-z][-a-z0-9]*[a-z0-9]|[0-9][-a-z0-9]*([a-z]|[-a-z][-a-z0-9]*[a-z0-9]))$", var.SECURITY_GROUP)) > 0
 		error_message = "The SECURITY_GROUP name is not valid."
@@ -74,7 +74,7 @@ variable "SECURITY_GROUP" {
 
 variable "DOMAIN_NAME" {
 	type		= string
-	description	= "Private Domain Name"
+	description	= "The Domain Name used for DNS and ALB. Duplicates are not allowed. The list with DNS resources can be searched here: https://cloud.ibm.com/resources."
 	nullable = false
 	default = "example.com"
 	validation {
@@ -84,144 +84,148 @@ variable "DOMAIN_NAME" {
 }
 
 locals {
-	ASCS-VIRT-HOSTNAME = "sap${var.sap_sid}ascs"
-	ERS-VIRT-HOSTNAME = "sap${var.sap_sid}ers"
-	HANA-VIRT-HOSTNAME = "db${var.hana_sid}hana"
+	ASCS_VIRT_HOSTNAME = "sap${var.SAP_SID}ascs"
+	ERS_VIRT_HOSTNAME = "sap${var.SAP_SID}ers"
+	HANA_VIRT_HOSTNAME = "db${var.HANA_SID}hana"
 }
 
-variable "ASCS-VIRT-HOSTNAME" {
+variable "ASCS_VIRT_HOSTNAME" {
 	type		= string
-	description	= "ASCS Virtual hostname​"
+	description	= "ASCS Virtual hostname."
 	nullable = false
 	default = "sapascs"
 	validation {
-		condition     =  length(var.ASCS-VIRT-HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.ASCS-VIRT-HOSTNAME)) > 0  && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.ASCS-VIRT-HOSTNAME)) == 0
+		condition     =  length(var.ASCS_VIRT_HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.ASCS_VIRT_HOSTNAME)) > 0  && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.ASCS_VIRT_HOSTNAME)) == 0
 		error_message = "The SUBDOMAIN_NAME variable should not be empty and no special chars are allowed."
 	}
 }
 
 output VIRT-HOSTNAME-ASCS {
-  value = var.ASCS-VIRT-HOSTNAME != "sapascs" ? var.ASCS-VIRT-HOSTNAME : lower ("${local.ASCS-VIRT-HOSTNAME}")
+  value = var.ASCS_VIRT_HOSTNAME != "sapascs" ? var.ASCS_VIRT_HOSTNAME : lower ("${local.ASCS_VIRT_HOSTNAME}")
 }
 
-variable "ERS-VIRT-HOSTNAME" {
+variable "ERS_VIRT_HOSTNAME" {
 	type		= string
-	description	= "ERS Virtual hostname"
+	description	= "ERS Virtual hostname."
 	nullable = false
 	default = "sapers"
 	validation {
-		condition     =  length(var.ERS-VIRT-HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.ERS-VIRT-HOSTNAME)) > 0 && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.ERS-VIRT-HOSTNAME)) == 0
+		condition     =  length(var.ERS_VIRT_HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.ERS_VIRT_HOSTNAME)) > 0 && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.ERS_VIRT_HOSTNAME)) == 0
 		error_message = "The SUBDOMAIN_NAME variable should not be empty and no special chars are allowed."
 	}
 }
 
 output VIRT-HOSTNAME-ERS {
-  value = var.ERS-VIRT-HOSTNAME != "sapers" ? var.ERS-VIRT-HOSTNAME : lower ("${local.ERS-VIRT-HOSTNAME}")
+  value = var.ERS_VIRT_HOSTNAME != "sapers" ? var.ERS_VIRT_HOSTNAME : lower ("${local.ERS_VIRT_HOSTNAME}")
 }
 
-variable "HANA-VIRT-HOSTNAME" {
+variable "HANA_VIRT_HOSTNAME" {
 	type		= string
-	description	= "HANA Virtual hostname"
+	description	= "HANA Virtual hostname."
 	nullable = false
 	default = "dbhana"
 	validation {
-		condition     =  length(var.HANA-VIRT-HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.HANA-VIRT-HOSTNAME)) > 0  && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.HANA-VIRT-HOSTNAME)) == 0
+		condition     =  length(var.HANA_VIRT_HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.HANA_VIRT_HOSTNAME)) > 0  && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.HANA_VIRT_HOSTNAME)) == 0
 		error_message = "The SUBDOMAIN_NAME variable should not be empty and no special chars are allowed."
 	}
 }
 
 output VIRT-HOSTNAME-HANA {
-  value = var.HANA-VIRT-HOSTNAME != "dbhana" ? var.HANA-VIRT-HOSTNAME : lower ("${local.HANA-VIRT-HOSTNAME}")
+  value = var.HANA_VIRT_HOSTNAME != "dbhana" ? var.HANA_VIRT_HOSTNAME : lower ("${local.HANA_VIRT_HOSTNAME}")
 }
 
 locals {
-	DB-HOSTNAME-1 = "hanadb-${var.hana_sid}-1"
-	DB-HOSTNAME-2 = "hanadb-${var.hana_sid}-2"
-	APP-HOSTNAME-1 = "sapapp-${var.sap_sid}-1"
-	APP-HOSTNAME-2 = "sapapp-${var.sap_sid}-2"
+	DB_HOSTNAME_1 = "hanadb-${var.HANA_SID}-1"
+	DB_HOSTNAME_2 = "hanadb-${var.HANA_SID}-2"
+	APP_HOSTNAME_1 = "sapapp-${var.SAP_SID}-1"
+	APP_HOSTNAME_2 = "sapapp-${var.SAP_SID}-2"
 	
 }
 
-variable "DB-PROFILE" {
+variable "DB_PROFILE" {
 	type		= string
-	description = "DB VSI Profile"
+	description = "DB VSI Profile. The certified profiles for SAP HANA in IBM VPC: https://cloud.ibm.com/docs/sap?topic=sap-hana-iaas-offerings-profiles-intel-vs-vpc"
 	default		= "mx2-16x128"
+	validation {
+		condition     = contains(keys(jsondecode(file("files/hana_volume_layout.json")).profiles), "${var.DB_PROFILE}")
+		error_message = "The chosen storage PROFILE for HANA VSI \"${var.DB_PROFILE}\" is not a certified storage profile. Please, chose the appropriate certified storage PROFILE for the HANA VSI from  https://cloud.ibm.com/docs/sap?topic=sap-hana-iaas-offerings-profiles-intel-vs-vpc . Make sure the selected PROFILE is certified for the selected OS type and for the proceesing type (SAP Business One, OLTP, OLAP)"
+	}
 }
 
-variable "DB-IMAGE" {
+variable "DB_IMAGE" {
 	type		= string
-	description = "DB VSI OS Image"
+	description = "The OS image used for the HANA/APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains the required SAP and HA subscriptions. A list of images is available here: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images."
 	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
 }
 
-variable "DB-HOSTNAME-1" {
+variable "DB_HOSTNAME_1" {
 	type		= string
-	description = "DB VSI Hostname-1. \n Obs.: With the default value, the output is dynamically based on <HANASID> like this: \"hanadb-$your_hana_sid-1\""
+	description = "SAP HANA Cluster VSI Hostnames - DB VSI Hostname-1. \n Obs: With the default value, the output is dynamically based on <HANASID>."
 	default = "hanadb-1"
 	validation {
-		condition     = length(var.DB-HOSTNAME-1) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.DB-HOSTNAME-1)) > 0
+		condition     = length(var.DB_HOSTNAME_1) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.DB_HOSTNAME_1)) > 0
 		error_message = "The DB-HOSTNAME is not valid."
 	}
 }
 
 output HANA-DB-HOSTNAME-VSI1 {
-  value = var.DB-HOSTNAME-1 != "hanadb-1" ? var.DB-HOSTNAME-1 : lower ("${local.DB-HOSTNAME-1}")
+  value = var.DB_HOSTNAME_1 != "hanadb-1" ? var.DB_HOSTNAME_1 : lower ("${local.DB_HOSTNAME_1}")
 }
 
-variable "DB-HOSTNAME-2" {
+variable "DB_HOSTNAME_2" {
 	type		= string
-	description = "DB VSI Hostname-2. \n Obs.: With the default value, the output is dynamically based on <HANASID> like this: \"hanadb-$your_hana_sid-2\""
+	description = "SAP HANA Cluster VSI Hostnames - DB VSI Hostname-2. \n Obs: With the default value, the output is dynamically based on <HANASID>."
 	default = "hanadb-2"
 	nullable = true
 	validation {
-		condition     = length(var.DB-HOSTNAME-2) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.DB-HOSTNAME-2)) > 0
+		condition     = length(var.DB_HOSTNAME_2) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.DB_HOSTNAME_2)) > 0
 		error_message = "The DB-HOSTNAME is not valid."
 	}
 }
 
 output HANA-DB-HOSTNAME-VSI2 {
-  value = var.DB-HOSTNAME-2 != "hanadb-2" ? var.DB-HOSTNAME-2 : lower ("${local.DB-HOSTNAME-2}")
+  value = var.DB_HOSTNAME_2 != "hanadb-2" ? var.DB_HOSTNAME_2 : lower ("${local.DB_HOSTNAME_2}")
 }
 
-variable "APP-PROFILE" {
+variable "APP_PROFILE" {
 	type		= string
-	description = "VSI Profile"
+	description = "The profile used for the APP VSI. A list of profiles is available here: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles. For more information, check SAP Note 2927211: \"SAP Applications on IBM Virtual Private Cloud\"."
 	default		= "bx2-4x16"
 }
 
-variable "APP-IMAGE" {
+variable "APP_IMAGE" {
 	type		= string
-	description = "VSI OS Image"
+	description = "The OS image used for the APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains the required SAP and HA subscriptions. A list of images is available here: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images."
 	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
 }
 
-variable "APP-HOSTNAME-1" {
+variable "APP_HOSTNAME_1" {
 	type		= string
-	description = "APP VSI Hostname-1. \n Obs.: With the default value, the output is dynamically based on <SAPSID> like this: \"sapapp-$your_sap_sid-1\""
+	description = "SAP APP Cluster VSI Hostnames - APP VSI Hostname-1. \n Obs: With the default value, the output is dynamically based on <SAPSID>."
 	default = "sapapp-1"
 	validation {
-		condition     = length(var.APP-HOSTNAME-1) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.APP-HOSTNAME-1)) > 0
+		condition     = length(var.APP_HOSTNAME_1) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.APP_HOSTNAME_1)) > 0
 		error_message = "The APP-HOSTNAME is not valid."
 	}
 }
 
 output SAP-APP-HOSTNAME-VSI1 {
-  value = var.APP-HOSTNAME-1 != "sapapp-1" ? var.APP-HOSTNAME-1 : lower ("${local.APP-HOSTNAME-1}")
+  value = var.APP_HOSTNAME_1 != "sapapp-1" ? var.APP_HOSTNAME_1 : lower ("${local.APP_HOSTNAME_1}")
 }
 
-variable "APP-HOSTNAME-2" {
+variable "APP_HOSTNAME_2" {
 	type		= string
-	description = "APP VSI Hostname-2. \n Obs.: With the default value, the output is dynamically based on <SAPSID> like this: \"sapapp-$your_sap_sid-2\""
+	description = "SAP APP Cluster VSI Hostnames - APP VSI Hostname-2. \n Obs: With the default value, the output is dynamically based on <SAPSID>."
 	default = "sapapp-2"
 	nullable = true
 	validation {
-		condition     = length(var.APP-HOSTNAME-2) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.APP-HOSTNAME-2)) > 0
+		condition     = length(var.APP_HOSTNAME_2) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.APP_HOSTNAME_2)) > 0
 		error_message = "The APP-HOSTNAME is not valid."
 	}
 }
 
 output SAP-APP-HOSTNAME-VSI2 {
-  value = var.APP-HOSTNAME-2 != "sapapp-2" ? var.APP-HOSTNAME-2 : lower ("${local.APP-HOSTNAME-2}")
+  value = var.APP_HOSTNAME_2 != "sapapp-2" ? var.APP_HOSTNAME_2 : lower ("${local.APP_HOSTNAME_2}")
 }
 
 locals {
@@ -232,41 +236,41 @@ locals {
 
 data "ibm_is_lb" "alb-ascs" {
   depends_on = [module.alb-prereq]
-  name    = lower ("${local.SAP-ALB-ASCS}-${var.sap_sid}")
+  name    = lower ("${local.SAP-ALB-ASCS}-${var.SAP_SID}")
 }
 
 data "ibm_is_lb" "alb-ers" {
   depends_on = [module.alb-prereq]
-  name    = lower ("${local.SAP-ALB-ERS}-${var.sap_sid}")
+  name    = lower ("${local.SAP-ALB-ERS}-${var.SAP_SID}")
 }
 
 data "ibm_is_lb" "alb-hana" {
   depends_on = [module.alb-prereq]
-  name    = lower ("${local.DB-ALB-HANA}-${var.hana_sid}")
+  name    = lower ("${local.DB-ALB-HANA}-${var.HANA_SID}")
 }
 
 data "ibm_is_instance" "app-vsi-1" {
   depends_on = [module.app-vsi]
-  name    =  var.APP-HOSTNAME-1 != "sapapp-1" ? var.APP-HOSTNAME-1 : lower ("${local.APP-HOSTNAME-1}")
+  name    =  var.APP_HOSTNAME_1 != "sapapp-1" ? var.APP_HOSTNAME_1 : lower ("${local.APP_HOSTNAME_1}")
 }
 
 data "ibm_is_instance" "app-vsi-2" {
   depends_on = [module.app-vsi]
-  name    = var.APP-HOSTNAME-2 != "sapapp-2" ? var.APP-HOSTNAME-2 : lower ("${local.APP-HOSTNAME-2}")
+  name    = var.APP_HOSTNAME_2 != "sapapp-2" ? var.APP_HOSTNAME_2 : lower ("${local.APP_HOSTNAME_2}")
 }
 
 data "ibm_is_instance" "db-vsi-1" {
   depends_on = [module.db-vsi]
-  name    =  var.DB-HOSTNAME-1 != "hanadb-1" ? var.DB-HOSTNAME-1 : lower ("${local.DB-HOSTNAME-1}")
+  name    =  var.DB_HOSTNAME_1 != "hanadb-1" ? var.DB_HOSTNAME_1 : lower ("${local.DB_HOSTNAME_1}")
 }
 
 data "ibm_is_instance" "db-vsi-2" {
   depends_on = [module.db-vsi]
-  name    = var.DB-HOSTNAME-2 != "hanadb-2" ? var.DB-HOSTNAME-2 : lower ("${local.DB-HOSTNAME-2}")
+  name    = var.DB_HOSTNAME_2 != "hanadb-2" ? var.DB_HOSTNAME_2 : lower ("${local.DB_HOSTNAME_2}")
 }
 
 ############################################################
-# The variables and data sources used in File_Shares Module. 
+# The variables and data sources used in File_Share Module. 
 ############################################################
 
 data "ibm_is_vpc" "vpc" {
@@ -277,50 +281,50 @@ data "ibm_resource_group" "group" {
   name		= var.RESOURCE_GROUP
 }
 
-variable "share_profile" {
-  description = "Enter the IOPs (IOPS per GB) tier for File Share storage. Valid values are: dp2, tier-3iops, tier-5iops, tier-10iops."
+variable "SHARE_PROFILE" {
+  description = "The File Share Profile Storage. For more details see: https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles&interface=ui#dp2-profile."
   type        = string
-  default     = "tier-5iops"
+  default     = "dp2"
 }
 
-variable "usrsap-as1" {
-  description = "FS Size in GB for usrsap-as1"
+variable "USRSAP_AS1" {
+  description = "File Share Size in GB for USRSAP_AS1"
   type        = number
   default = 20
 }
 
-variable "usrsap-as2" {
-  description = "FS Size in GB for usrsap-as2"
+variable "USRSAP_AS2" {
+  description = "File Share Size in GB for USRSAP_AS2"
   type        = number
   default = 20
 }
 
-variable "usrsap-sapascs" {
-  description = "FS Size in GB for usrsap-sapascs"
+variable "USRSAP_SAPASCS" {
+  description = "File Share Size in GB for USRSAP_SAPASCS"
   type        = number
   default = 20
 }
 
-variable "usrsap-sapers" {
-  description = "FS Size in GB for usrsap-sapers"
+variable "USRSAP_SAPERS" {
+  description = "File Share Size in GB for USRSAP_SAPERS"
   type        = number
   default = 20
 }
 
-variable "usrsap-sapmnt" {
-  description = "FS Size in GB for usrsap-sapmnt"
+variable "USRSAP_SAPMNT" {
+  description = "File Share Size in GB for USRSAP_SAPMNT"
   type        = number
   default = 20
 }
 
-variable "usrsap-sapsys" {
-  description = "FS Size in GB for usrsap-sapsys"
+variable "USRSAP_SAPSYS" {
+  description = "File Share Size in GB for USRSAP_SAPSYS"
   type        = number
   default = 20
 }
 
-variable "usrsap-trans" {
-  description = "FS Size in GB for usrsap-trans"
+variable "USRSAP_TRANS" {
+  description = "File Share Size in GB for USRSAP_TRANS"
   type        = number
   default = 80
 }
@@ -329,192 +333,192 @@ variable "usrsap-trans" {
 # The variables and data sources used in SAP Ansible Modules.
 ##############################################################
 
-variable "hana_sid" {
+variable "HANA_SID" {
 	type		= string
-	description = "hana_sid"
+	description = "The SAP system ID identifies the SAP HANA system."
 	default		= "HDB"
 	validation {
-		condition     = length(regexall("^[a-zA-Z][a-zA-Z0-9][a-zA-Z0-9]$", var.hana_sid)) > 0  && !contains(["ADD", "ALL", "AMD", "AND", "ANY", "ARE", "ASC", "AUX", "AVG", "BIT", "CDC", "COM", "CON", "DBA", "END", "EPS", "FOR", "GET", "GID", "IBM", "INT", "KEY", "LOG", "LPT", "MAP", "MAX", "MIN", "MON", "NIX", "NOT", "NUL", "OFF", "OLD", "OMS", "OUT", "PAD", "PRN", "RAW", "REF", "ROW", "SAP", "SET", "SGA", "SHG", "SID", "SQL", "SUM", "SYS", "TMP", "TOP", "UID", "USE", "USR", "VAR"], var.hana_sid)
-		error_message = "The hana_sid is not valid."
+		condition     = length(regexall("^[a-zA-Z][a-zA-Z0-9][a-zA-Z0-9]$", var.HANA_SID)) > 0  && !contains(["ADD", "ALL", "AMD", "AND", "ANY", "ARE", "ASC", "AUX", "AVG", "BIT", "CDC", "COM", "CON", "DBA", "END", "EPS", "FOR", "GET", "GID", "IBM", "INT", "KEY", "LOG", "LPT", "MAP", "MAX", "MIN", "MON", "NIX", "NOT", "NUL", "OFF", "OLD", "OMS", "OUT", "PAD", "PRN", "RAW", "REF", "ROW", "SAP", "SET", "SGA", "SHG", "SID", "SQL", "SUM", "SYS", "TMP", "TOP", "UID", "USE", "USR", "VAR"], var.HANA_SID)
+		error_message = "The HANA_SID is not valid."
 	}
 }
 
-variable "sap_ascs_instance_number" {
+variable "SAP_ASCS_INSTANCE_NUMBER" {
 	type		= string
-	description = "sap_ascs_instance_number"
+	description = "Technical identifier for internal processes of ASCS."
 	default		= "00"
 	validation {
-		condition     = var.sap_ascs_instance_number >= 0 && var.sap_ascs_instance_number <=97
-		error_message = "The sap_ascs_instance_number is not valid."
+		condition     = var.SAP_ASCS_INSTANCE_NUMBER >= 0 && var.SAP_ASCS_INSTANCE_NUMBER <=97
+		error_message = "The SAP_ASCS_INSTANCE_NUMBER is not valid."
 	}
 }
 
-variable "sap_ers_instance_number" {
+variable "SAP_ERS_INSTANCE_NUMBER" {
 	type		= string
-	description = "sap_ers_instance_number"
+	description = "Technical identifier for internal processes of ERS."
 	default		= "01"
 	validation {
-		condition     = var.sap_ers_instance_number >= 00 && var.sap_ers_instance_number <=99
-		error_message = "The sap_ers_instance_number is not valid."
+		condition     = var.SAP_ERS_INSTANCE_NUMBER >= 00 && var.SAP_ERS_INSTANCE_NUMBER <=99
+		error_message = "The SAP_ERS_INSTANCE_NUMBER is not valid."
 	}
 }
 
-variable "sap_ci_instance_number" {
+variable "SAP_CI_INSTANCE_NUMBER" {
 	type		= string
-	description = "sap_ci_instance_number"
+	description = "Technical identifier for internal processes of PAS."
 	default		= "10"
 	validation {
-		condition     = var.sap_ci_instance_number >= 00 && var.sap_ci_instance_number <=99
-		error_message = "The sap_ci_instance_number is not valid."
+		condition     = var.SAP_CI_INSTANCE_NUMBER >= 00 && var.SAP_CI_INSTANCE_NUMBER <=99
+		error_message = "The SAP_CI_INSTANCE_NUMBER is not valid."
 	}
 }
 
-variable "sap_aas_instance_number" {
+variable "SAP_AAS_INSTANCE_NUMBER" {
 	type		= string
-	description = "sap_aas_instance_number"
+	description = "Technical identifier for internal processes of AAS."
 	default		= "20"
 	validation {
-		condition     = var.sap_aas_instance_number >= 00 && var.sap_aas_instance_number <=99
-		error_message = "The sap_aas_instance_number is not valid."
+		condition     = var.SAP_AAS_INSTANCE_NUMBER >= 00 && var.SAP_AAS_INSTANCE_NUMBER <=99
+		error_message = "The SAP_AAS_INSTANCE_NUMBER is not valid."
 	}
 }
 
-variable "hana_sysno" {
+variable "HANA_SYSNO" {
 	type		= string
-	description = "hana_sysno"
+	description = "Specifies the instance number of the SAP HANA system."
 	default		= "00"
 	validation {
-		condition     = var.hana_sysno >= 0 && var.hana_sysno <=97
-		error_message = "The hana_sysno is not valid."
+		condition     = var.HANA_SYSNO >= 0 && var.HANA_SYSNO <=97
+		error_message = "The HANA_SYSNO is not valid."
 	}
 }
 
-variable "hana_main_password" {
+variable "HANA_MAIN_PASSWORD" {
 	type		= string
 	sensitive = true
-	description = "HANADB main password"
+	description = "Common password for all users that are created during the installation."
 	validation {
-		condition     = length(regexall("^(.{0,7}|.{15,}|[^0-9a-zA-Z]*)$", var.hana_main_password)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z!@#$_]+$", var.hana_main_password)) > 0
-		error_message = "The hana_main_password is not valid."
+		condition     = length(regexall("^(.{0,7}|.{15,}|[^0-9a-zA-Z]*)$", var.HANA_MAIN_PASSWORD)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z!@#$_]+$", var.HANA_MAIN_PASSWORD)) > 0
+		error_message = "The HANA_MAIN_PASSWORD is not valid."
 	}
 }
 
-variable "hana_system_usage" {
+variable "HANA_SYSTEM_USAGE" {
 	type		= string
-	description = "hana_system_usage"
+	description = "System Usage. Default: \"custom\". Valid values: \"production\", \"test\", \"development\", \"custom\"."
 	default		= "custom"
 	validation {
-		condition     = contains(["production", "test", "development", "custom" ], var.hana_system_usage )
-		error_message = "The hana_system_usage must be one of: production, test, development, custom."
+		condition     = contains(["production", "test", "development", "custom" ], var.HANA_SYSTEM_USAGE )
+		error_message = "The HANA_SYSTEM_USAGE must be one of: production, test, development, custom."
 	}
 }
 
-variable "hana_components" {
+variable "HANA_COMPONENTS" {
 	type		= string
-	description = "hana_components"
+	description = "SAP HANA Components. Default: \"server\". Valid values: \"all\", \"client\", \"es\", \"ets\", \"lcapps\", \"server\", \"smartda\", \"streaming\", \"rdsync\", \"xs\", \"studio\", \"afl\", \"sca\", \"sop\", \"eml\", \"rme\", \"rtl\", \"trp\"."
 	default		= "server"
 	validation {
-		condition     = contains(["all", "client", "es", "ets", "lcapps", "server", "smartda", "streaming", "rdsync", "xs", "studio", "afl", "sca", "sop", "eml", "rme", "rtl", "trp" ], var.hana_components )
-		error_message = "The hana_components must be one of: all, client, es, ets, lcapps, server, smartda, streaming, rdsync, xs, studio, afl, sca, sop, eml, rme, rtl, trp."
+		condition     = contains(["all", "client", "es", "ets", "lcapps", "server", "smartda", "streaming", "rdsync", "xs", "studio", "afl", "sca", "sop", "eml", "rme", "rtl", "trp" ], var.HANA_COMPONENTS )
+		error_message = "The HANA_COMPONENTS must be one of: all, client, es, ets, lcapps, server, smartda, streaming, rdsync, xs, studio, afl, sca, sop, eml, rme, rtl, trp."
 	}
 }
 
-variable "kit_saphana_file" {
+variable "KIT_SAPHANA_FILE" {
 	type		= string
-	description = "kit_saphana_file"
+	description = "Path to SAP HANA ZIP file, as downloaded from SAP Support Portal."
 	default		= "/storage/HANADB/51055299.ZIP"
 }
 
-variable "sap_sid" {
+variable "SAP_SID" {
 	type		= string
-	description = "sap_sid"
+	description = "The SAP system ID identifies the entire SAP system."
 	default		= "S4A"
 	validation {
-		condition     = length(regexall("^[a-zA-Z][a-zA-Z0-9][a-zA-Z0-9]$", var.sap_sid)) > 0 && !contains(["ADD", "ALL", "AMD", "AND", "ANY", "ARE", "ASC", "AUX", "AVG", "BIT", "CDC", "COM", "CON", "DBA", "END", "EPS", "FOR", "GET", "GID", "IBM", "INT", "KEY", "LOG", "LPT", "MAP", "MAX", "MIN", "MON", "NIX", "NOT", "NUL", "OFF", "OLD", "OMS", "OUT", "PAD", "PRN", "RAW", "REF", "ROW", "SAP", "SET", "SGA", "SHG", "SID", "SQL", "SUM", "SYS", "TMP", "TOP", "UID", "USE", "USR", "VAR"], var.sap_sid)
-		error_message = "The sap_sid is not valid."
+		condition     = length(regexall("^[a-zA-Z][a-zA-Z0-9][a-zA-Z0-9]$", var.SAP_SID)) > 0 && !contains(["ADD", "ALL", "AMD", "AND", "ANY", "ARE", "ASC", "AUX", "AVG", "BIT", "CDC", "COM", "CON", "DBA", "END", "EPS", "FOR", "GET", "GID", "IBM", "INT", "KEY", "LOG", "LPT", "MAP", "MAX", "MIN", "MON", "NIX", "NOT", "NUL", "OFF", "OLD", "OMS", "OUT", "PAD", "PRN", "RAW", "REF", "ROW", "SAP", "SET", "SGA", "SHG", "SID", "SQL", "SUM", "SYS", "TMP", "TOP", "UID", "USE", "USR", "VAR"], var.SAP_SID)
+		error_message = "The SAP_SID is not valid."
 	}
 }
 
-variable "sap_main_password" {
+variable "SAP_MAIN_PASSWORD" {
 	type		= string
 	sensitive = true
-	description = "SAP main password"
+	description = "Common password for all users that are created during the installation."
 	validation {
-		condition     = length(regexall("^(.{0,9}|.{15,}|[^0-9]*)$", var.sap_main_password)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z@#$_]+$", var.sap_main_password)) > 0
-		error_message = "The sap_main_password is not valid."
+		condition     = length(regexall("^(.{0,9}|.{15,}|[^0-9]*)$", var.SAP_MAIN_PASSWORD)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z@#$_]+$", var.SAP_MAIN_PASSWORD)) > 0
+		error_message = "The SAP_MAIN_PASSWORD is not valid."
 	}
 }
 
-variable "ha_password" {
+variable "HA_PASSWORD" {
 	type		= string
 	sensitive = true
-	description = "HA cluster password"
+	description = "HA cluster password."
 	validation {
-		condition     = length(regexall("^(.{0,9}|.{15,}|[^0-9]*)$", var.ha_password)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z@#$_]+$", var.ha_password)) > 0
-		error_message = "The ha_password is not valid."
+		condition     = length(regexall("^(.{0,9}|.{15,}|[^0-9]*)$", var.HA_PASSWORD)) == 0 && length(regexall("^[^0-9_][0-9a-zA-Z@#$_]+$", var.HA_PASSWORD)) > 0
+		error_message = "The HA_PASSWORD is not valid."
 	}
 }
 
-variable "hdb_concurrent_jobs" {
+variable "HDB_CONCURRENT_JOBS" {
 	type		= string
-	description = "hdb_concurrent_jobs"
+	description = "Number of concurrent jobs used to load and/or extract archives to HANA Host."
 	default		= "23"
 	validation {
-		condition     = var.hdb_concurrent_jobs >= 1 && var.hdb_concurrent_jobs <=25
-		error_message = "The hdb_concurrent_jobs is not valid."
+		condition     = var.HDB_CONCURRENT_JOBS >= 1 && var.HDB_CONCURRENT_JOBS <=25
+		error_message = "The HDB_CONCURRENT_JOBS is not valid."
 	}
 }
 
-variable "kit_sapcar_file" {
+variable "KIT_SAPCAR_FILE" {
 	type		= string
-	description = "kit_sapcar_file"
+	description = "Path to sapcar binary, as downloaded from SAP Support Portal."
 	default		= "/storage/S4HANA/SAPCAR_1010-70006178.EXE"
 }
 
-variable "kit_swpm_file" {
+variable "KIT_SWPM_FILE" {
 	type		= string
-	description = "kit_swpm_file"
+	description = "Path to SWPM archive (SAR), as downloaded from SAP Support Portal."
 	default		= "/storage/S4HANA/SWPM20SP13_1-80003424.SAR"
 }
 
-variable "kit_sapexe_file" {
+variable "KIT_SAPEXE_FILE" {
 	type		= string
-	description = "kit_sapexe_file"
+	description = "Path to SAP Kernel OS archive (SAR), as downloaded from SAP Support Portal."
 	default		= "/storage/S4HANA/SAPEXE_100-70005283.SAR"
 }
 
-variable "kit_sapexedb_file" {
+variable "KIT_SAPEXEDB_FILE" {
 	type		= string
-	description = "kit_sapexedb_file"
+	description = "Path to SAP Kernel DB archive (SAR), as downloaded from SAP Support Portal."
 	default		= "/storage/S4HANA/SAPEXEDB_100-70005282.SAR"
 }
 
-variable "kit_igsexe_file" {
+variable "KIT_IGSEXE_FILE" {
 	type		= string
-	description = "kit_igsexe_file"
+	description = "Path to IGS archive (SAR), as downloaded from SAP Support Portal."
 	default		= "/storage/S4HANA/igsexe_1-70005417.sar"
 }
 
-variable "kit_igshelper_file" {
+variable "KIT_IGSHELPER_FILE" {
 	type		= string
-	description = "kit_igshelper_file"
+	description = "Path to IGS Helper archive (SAR), as downloaded from SAP Support Portal."
 	default		= "/storage/S4HANA/igshelper_17-10010245.sar"
 }
 
-variable "kit_saphotagent_file" {
+variable "KIT_SAPHOSTAGENT_FILE" {
 	type		= string
-	description = "kit_saphotagent_file"
+	description = "Path to SAP Host Agent archive (SAR), as downloaded from SAP Support Portal."
 	default		= "/storage/S4HANA/SAPHOSTAGENT51_51-20009394.SAR"
 }
 
-variable "kit_hdbclient_file" {
+variable "KIT_HDBCLIENT_FILE" {
 	type		= string
-	description = "kit_hdbclient_file"
+	description = "Path to HANA DB client archive (SAR), as downloaded from SAP Support Portal."
 	default		= "/storage/S4HANA/IMDB_CLIENT20_009_28-80002082.SAR"
 }
 
-variable "kit_s4hana_export" {
+variable "KIT_S4HANA_EXPORT" {
 	type		= string
-	description = "kit_s4hana_export"
+	description = "Path to S/4HANA Installation Export dir. The archives downloaded from SAP Support Portal should be present in this path."
 	default		= "/storage/S4HANA/export"
 }

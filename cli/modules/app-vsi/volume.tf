@@ -1,7 +1,7 @@
 resource "ibm_is_volume" "vol" {
 
 count = length( var.VOLUME_SIZES )
-  name		= "${var.FINAL-DEFAULT-HOSTNAME}-vol${count.index}"
+  name		= "${var.REAL_HOSTNAME}-vol${count.index}"
   zone		= var.ZONE
   resource_group = data.ibm_resource_group.group.id
   capacity	= var.VOLUME_SIZES[count.index]

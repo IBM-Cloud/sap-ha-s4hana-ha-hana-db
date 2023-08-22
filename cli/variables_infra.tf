@@ -32,54 +32,54 @@ variable "DOMAIN_NAME" {
 }
 
 locals {
-	ASCS-VIRT-HOSTNAME = "sap${var.sap_sid}ascs"
-	ERS-VIRT-HOSTNAME = "sap${var.sap_sid}ers"
-	HANA-VIRT-HOSTNAME = "db${var.hana_sid}hana"
+	ASCS_VIRT_HOSTNAME = "sap${var.SAP_SID}ascs"
+	ERS_VIRT_HOSTNAME = "sap${var.SAP_SID}ers"
+	HANA_VIRT_HOSTNAME = "db${var.HANA_SID}hana"
 }
 
-variable "ASCS-VIRT-HOSTNAME" {
+variable "ASCS_VIRT_HOSTNAME" {
 	type		= string
 	description	= "Private SubDomain Name"
 	nullable = false
 	default = "sapascs"
 	validation {
-		condition     =  length(var.ASCS-VIRT-HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.ASCS-VIRT-HOSTNAME)) > 0  && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.ASCS-VIRT-HOSTNAME)) == 0
+		condition     =  length(var.ASCS_VIRT_HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.ASCS_VIRT_HOSTNAME)) > 0  && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.ASCS_VIRT_HOSTNAME)) == 0
 		error_message = "The SUBDOMAIN_NAME variable should not be empty and no special chars are allowed."
 	}
 }
 
 output VIRT-HOSTNAME-ASCS {
-  value = var.ASCS-VIRT-HOSTNAME != "sapascs" ? var.ASCS-VIRT-HOSTNAME : lower ("${local.ASCS-VIRT-HOSTNAME}")
+  value = var.ASCS_VIRT_HOSTNAME != "sapascs" ? var.ASCS_VIRT_HOSTNAME : lower ("${local.ASCS_VIRT_HOSTNAME}")
 }
 
-variable "ERS-VIRT-HOSTNAME" {
+variable "ERS_VIRT_HOSTNAME" {
 	type		= string
 	description	= "Private SubDomain Name"
 	nullable = false
 	default = "sapers"
 	validation {
-		condition     =  length(var.ERS-VIRT-HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.ERS-VIRT-HOSTNAME)) > 0 && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.ERS-VIRT-HOSTNAME)) == 0
+		condition     =  length(var.ERS_VIRT_HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.ERS_VIRT_HOSTNAME)) > 0 && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.ERS_VIRT_HOSTNAME)) == 0
 		error_message = "The SUBDOMAIN_NAME variable should not be empty and no special chars are allowed."
 	}
 }
 
 output VIRT-HOSTNAME-ERS {
-  value = var.ERS-VIRT-HOSTNAME != "sapers" ? var.ERS-VIRT-HOSTNAME : lower ("${local.ERS-VIRT-HOSTNAME}")
+  value = var.ERS_VIRT_HOSTNAME != "sapers" ? var.ERS_VIRT_HOSTNAME : lower ("${local.ERS_VIRT_HOSTNAME}")
 }
 
-variable "HANA-VIRT-HOSTNAME" {
+variable "HANA_VIRT_HOSTNAME" {
 	type		= string
 	description	= "Private SubDomain Name"
 	nullable = false
 	default = "dbhana"
 	validation {
-		condition     =  length(var.HANA-VIRT-HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.HANA-VIRT-HOSTNAME)) > 0  && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.HANA-VIRT-HOSTNAME)) == 0
+		condition     =  length(var.HANA_VIRT_HOSTNAME) > 2  && length (regex("^[a-z]*||^[0-9]*", var.HANA_VIRT_HOSTNAME)) > 0  && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.HANA_VIRT_HOSTNAME)) == 0
 		error_message = "The SUBDOMAIN_NAME variable should not be empty and no special chars are allowed."
 	}
 }
 
 output VIRT-HOSTNAME-HANA {
-  value = var.HANA-VIRT-HOSTNAME != "dbhana" ? var.HANA-VIRT-HOSTNAME : lower ("${local.HANA-VIRT-HOSTNAME}")
+  value = var.HANA_VIRT_HOSTNAME != "dbhana" ? var.HANA_VIRT_HOSTNAME : lower ("${local.HANA_VIRT_HOSTNAME}")
 }
 
 
@@ -126,93 +126,101 @@ variable "SSH_KEYS" {
 }
 
 locals {
-	DB-HOSTNAME-1 = "hanadb-${var.hana_sid}-1"
-	DB-HOSTNAME-2 = "hanadb-${var.hana_sid}-2"
-	APP-HOSTNAME-1 = "sapapp-${var.sap_sid}-1"
-	APP-HOSTNAME-2 = "sapapp-${var.sap_sid}-2"
+	DB_HOSTNAME_1 = "hanadb-${var.HANA_SID}-1"
+	DB_HOSTNAME_2 = "hanadb-${var.HANA_SID}-2"
+	APP_HOSTNAME_1 = "sapapp-${var.SAP_SID}-1"
+	APP_HOSTNAME_2 = "sapapp-${var.SAP_SID}-2"
 	
 }
 
-variable "DB-PROFILE" {
+variable "DB_PROFILE" {
 	type		= string
-	description = "DB VSI Profile"
+	description = "DB VSI Profile. The certified profiles for SAP HANA in IBM VPC: https://cloud.ibm.com/docs/sap?topic=sap-hana-iaas-offerings-profiles-intel-vs-vpc"
 	default		= "mx2-16x128"
+	validation {
+		condition     = contains(keys(jsondecode(file("files/hana_volume_layout.json")).profiles), "${var.DB_PROFILE}")
+		error_message = "The chosen storage PROFILE for HANA VSI \"${var.DB_PROFILE}\" is not a certified storage profile. Please, chose the appropriate certified storage PROFILE for the HANA VSI from  https://cloud.ibm.com/docs/sap?topic=sap-hana-iaas-offerings-profiles-intel-vs-vpc . Make sure the selected PROFILE is certified for the selected OS type and for the proceesing type (SAP Business One, OLTP, OLAP)"
+	}
 }
 
-variable "DB-IMAGE" {
+variable "DB_IMAGE" {
 	type		= string
 	description = "DB VSI OS Image"
 	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
+	validation {
+		condition     = length(regexall("^(ibm-redhat-8-6-amd64-sap-hana|ibm-redhat-8-4-amd64-sap-hana|ibm-sles-15-4-amd64-sap-hana|ibm-sles-15-3-amd64-sap-hana)-[0-9][0-9]*", var.DB_IMAGE)) > 0
+		error_message = "The OS SAP DB_IMAGE must be one of  \"ibm-sles-15-4-amd64-sap-hana-x\", \"ibm-sles-15-3-amd64-sap-hana-x\", \"ibm-redhat-8-6-amd64-sap-hana-x\" or \"ibm-redhat-8-4-amd64-sap-hana-x\"."
+ 	}
 }
 
-variable "DB-HOSTNAME-1" {
+variable "DB_HOSTNAME_1" {
 	type		= string
 	description = "DB VSI Hostname-1"
 	default = "hanadb-1"
 	validation {
-		condition     = length(var.DB-HOSTNAME-1) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.DB-HOSTNAME-1)) > 0
+		condition     = length(var.DB_HOSTNAME_1) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.DB_HOSTNAME_1)) > 0
 		error_message = "The DB-HOSTNAME is not valid."
 	}
 }
 
 output HANA-DB-HOSTNAME-VSI1 {
-  value = var.DB-HOSTNAME-1 != "hanadb-1" ? var.DB-HOSTNAME-1 : lower ("${local.DB-HOSTNAME-1}")
+  value = var.DB_HOSTNAME_1 != "hanadb-1" ? var.DB_HOSTNAME_1 : lower ("${local.DB_HOSTNAME_1}")
 }
 
-variable "DB-HOSTNAME-2" {
+variable "DB_HOSTNAME_2" {
 	type		= string
 	description = "DB VSI Hostname-2"
 	default = "hanadb-2"
 	nullable = true
 	validation {
-		condition     = length(var.DB-HOSTNAME-2) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.DB-HOSTNAME-2)) > 0
+		condition     = length(var.DB_HOSTNAME_2) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.DB_HOSTNAME_2)) > 0
 		error_message = "The DB-HOSTNAME is not valid."
 	}
 }
 
 output HANA-DB-HOSTNAME-VSI2 {
-  value = var.DB-HOSTNAME-2 != "hanadb-2" ? var.DB-HOSTNAME-2 : lower ("${local.DB-HOSTNAME-2}")
+  value = var.DB_HOSTNAME_2 != "hanadb-2" ? var.DB_HOSTNAME_2 : lower ("${local.DB_HOSTNAME_2}")
 }
 
-variable "APP-PROFILE" {
+variable "APP_PROFILE" {
 	type		= string
 	description = "VSI Profile"
 	default		= "bx2-4x16"
 }
 
-variable "APP-IMAGE" {
+variable "APP_IMAGE" {
 	type		= string
 	description = "VSI OS Image"
 	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
 }
 
-variable "APP-HOSTNAME-1" {
+variable "APP_HOSTNAME_1" {
 	type		= string
 	description = "APP VSI Hostname-1"
 	default = "sapapp-1"
 	validation {
-		condition     = length(var.APP-HOSTNAME-1) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.APP-HOSTNAME-1)) > 0
+		condition     = length(var.APP_HOSTNAME_1) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.APP_HOSTNAME_1)) > 0
 		error_message = "The APP-HOSTNAME is not valid."
 	}
 }
 
 output SAP-APP-HOSTNAME-VSI1 {
-  value = var.APP-HOSTNAME-1 != "sapapp-1" ? var.APP-HOSTNAME-1 : lower ("${local.APP-HOSTNAME-1}")
+  value = var.APP_HOSTNAME_1 != "sapapp-1" ? var.APP_HOSTNAME_1 : lower ("${local.APP_HOSTNAME_1}")
 }
 
-variable "APP-HOSTNAME-2" {
+variable "APP_HOSTNAME_2" {
 	type		= string
 	description = "DB VSI Hostname-2"
 	default = "sapapp-2"
 	nullable = true
 	validation {
-		condition     = length(var.APP-HOSTNAME-2) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.APP-HOSTNAME-2)) > 0
+		condition     = length(var.APP_HOSTNAME_2) <= 13 && length(regexall("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", var.APP_HOSTNAME_2)) > 0
 		error_message = "The APP-HOSTNAME is not valid."
 	}
 }
 
 output SAP-APP-HOSTNAME-VSI2 {
-  value = var.APP-HOSTNAME-2 != "sapapp-2" ? var.APP-HOSTNAME-2 : lower ("${local.APP-HOSTNAME-2}")
+  value = var.APP_HOSTNAME_2 != "sapapp-2" ? var.APP_HOSTNAME_2 : lower ("${local.APP_HOSTNAME_2}")
 }
 
 locals {
@@ -223,37 +231,37 @@ locals {
 
 data "ibm_is_lb" "alb-ascs" {
   depends_on = [module.alb-prereq]
-  name    = lower ("${local.SAP-ALB-ASCS}-${var.sap_sid}")
+  name    = lower ("${local.SAP-ALB-ASCS}-${var.SAP_SID}")
 }
 
 data "ibm_is_lb" "alb-ers" {
   depends_on = [module.alb-prereq]
-  name    = lower ("${local.SAP-ALB-ERS}-${var.sap_sid}")
+  name    = lower ("${local.SAP-ALB-ERS}-${var.SAP_SID}")
 }
 
 data "ibm_is_lb" "alb-hana" {
   depends_on = [module.alb-prereq]
-  name    = lower ("${local.DB-ALB-HANA}-${var.hana_sid}")
+  name    = lower ("${local.DB-ALB-HANA}-${var.HANA_SID}")
 }
 
 ###
 
 data "ibm_is_instance" "app-vsi-1" {
   depends_on = [module.app-vsi]
-  name    =  var.APP-HOSTNAME-1 != "sapapp-1" ? var.APP-HOSTNAME-1 : lower ("${local.APP-HOSTNAME-1}")
+  name    =  var.APP_HOSTNAME_1 != "sapapp-1" ? var.APP_HOSTNAME_1 : lower ("${local.APP_HOSTNAME_1}")
 }
 
 data "ibm_is_instance" "app-vsi-2" {
   depends_on = [module.app-vsi]
-  name    = var.APP-HOSTNAME-2 != "sapapp-2" ? var.APP-HOSTNAME-2 : lower ("${local.APP-HOSTNAME-2}")
+  name    = var.APP_HOSTNAME_2 != "sapapp-2" ? var.APP_HOSTNAME_2 : lower ("${local.APP_HOSTNAME_2}")
 }
 
 data "ibm_is_instance" "db-vsi-1" {
   depends_on = [module.db-vsi]
-  name    =  var.DB-HOSTNAME-1 != "hanadb-1" ? var.DB-HOSTNAME-1 : lower ("${local.DB-HOSTNAME-1}")
+  name    =  var.DB_HOSTNAME_1 != "hanadb-1" ? var.DB_HOSTNAME_1 : lower ("${local.DB_HOSTNAME_1}")
 }
 
 data "ibm_is_instance" "db-vsi-2" {
   depends_on = [module.db-vsi]
-  name    = var.DB-HOSTNAME-2 != "hanadb-2" ? var.DB-HOSTNAME-2 : lower ("${local.DB-HOSTNAME-2}")
+  name    = var.DB_HOSTNAME_2 != "hanadb-2" ? var.DB_HOSTNAME_2 : lower ("${local.DB_HOSTNAME_2}")
 }

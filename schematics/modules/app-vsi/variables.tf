@@ -72,3 +72,8 @@ variable "FINAL-DEFAULT-HOSTNAME" {
 	type		= string
 	description = "APP VSI Hostname"
 }
+
+variable "REAL_HOSTNAME" {
+	type		= string
+	description = "APP VSI Real Hostname"
+}

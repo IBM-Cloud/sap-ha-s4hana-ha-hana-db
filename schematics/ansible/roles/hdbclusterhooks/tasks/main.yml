@@ -16,6 +16,10 @@
     group: sapsys
     mode: 0755
 
+- name: Pause for 15 minutes to allow all started processes to complete
+  ansible.builtin.pause:
+    minutes: 15
+
 - name: Stop HANADB instance
   shell: |
       /usr/sap/{{ hana_sid | upper }}/HDB{{ hana_sysno }}/HDB stop

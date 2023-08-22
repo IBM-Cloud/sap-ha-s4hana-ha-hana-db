@@ -6,6 +6,12 @@ output "HANA-DB-PRIVATE-IP-VSI2" {
   value		= "${data.ibm_is_instance.db-vsi-2.primary_network_interface[0].primary_ip[0].address}"
 }
 
+output "HANA-STORAGE-LAYOUT" {
+  value = distinct([
+    for stg in module.db-vsi : stg.STORAGE-LAYOUT
+  ])[0]
+}
+
 output "SAP-APP-PRIVATE-IP-VSI1" {
   value		= "${data.ibm_is_instance.app-vsi-1.primary_network_interface[0].primary_ip[0].address}"
 }

@@ -8,9 +8,9 @@ resource "local_file" "ha_ansible_dns-vars" {
 
 # DNS variables
 domain_name: "${var.DOMAIN_NAME}"
-cname_ascs: "${var.ASCS-VIRT-HOSTNAME}"
-cname_ers: "${var.ERS-VIRT-HOSTNAME}"
-cname_hana: "${var.HANA-VIRT-HOSTNAME}"
+cname_ascs: "${var.ASCS_VIRT_HOSTNAME}"
+cname_ers: "${var.ERS_VIRT_HOSTNAME}"
+cname_hana: "${var.HANA_VIRT_HOSTNAME}"
 ...
     DOC
   filename = "ansible/dns-vars.yml"

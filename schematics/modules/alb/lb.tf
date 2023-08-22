@@ -116,7 +116,7 @@ resource "ibm_is_lb_listener" "sap-frontend" {
   protocol     = "tcp"
   port         = "${var.SAP_PORT_LB}"
   default_pool = ibm_is_lb_pool.sap-backend.pool_id
-  idle_connection_timeout = 50
+  idle_connection_timeout = 300
 }
 
 

@@ -50,17 +50,17 @@ data "ibm_resource_group" "group" {
   name		= var.RESOURCE_GROUP
 }
 
-variable "ASCS-VIRT-HOSTNAME" {
+variable "ASCS_VIRT_HOSTNAME" {
 	type		= string
 	description	= "Private SubDomain Name"
 }
 
-variable "ERS-VIRT-HOSTNAME" {
+variable "ERS_VIRT_HOSTNAME" {
 	type		= string
 	description	= "Private SubDomain Name"
 }
 
-variable "HANA-VIRT-HOSTNAME" {
+variable "HANA_VIRT_HOSTNAME" {
 	type		= string
 	description	= "Private SubDomain Name"
 }

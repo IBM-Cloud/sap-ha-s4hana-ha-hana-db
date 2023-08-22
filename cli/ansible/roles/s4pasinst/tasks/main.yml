@@ -1,4 +1,8 @@
 ---
+- name: Pause for 10 minutes to make sure HANA is up
+  ansible.builtin.pause:
+    minutes: 10
+
 - name: Generate parameter file for sapinst
   template:
       src: pasconfig.cfg

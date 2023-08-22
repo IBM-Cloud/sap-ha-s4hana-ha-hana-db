@@ -1,14 +1,23 @@
 ########################### File Share Creation
 ##################################################
 
-resource "time_sleep" "wait_for_FS_api" {
-  create_duration = var.var_timeout
+resource "ibm_is_share" "sap_fs" {
+    access_control_mode = "vpc"
+    zone    = var.zone
+    resource_group = var.resource_group_id 
+    size    = var.share_size
+    name    = local.share_name
+    profile = var.share_profile
 }
 
-resource "null_resource" "create_file_share" {
-  depends_on = [ time_sleep.wait_for_FS_api ]
-    provisioner "local-exec" {
-    command = "export resource_group_id=${var.resource_group_id };export vpc_api_endpoint=${local.vpc_api_endpoint}; export vpc_id=${var.vpc_id};export region=${var.region};export api_key=${var.api_key};export share_size=${var.share_size};export share_name=${local.share_name};export share_profile=${var.share_profile};export zone=${var.zone}; chmod +x ${path.module}/create_file_share.sh; ${path.module}/create_file_share.sh > ${path.module}/cfs.log"
-    interpreter = ["/bin/bash", "-c"]
-      }
+resource "ibm_is_share_mount_target" "mount_target_sap_fs" {
+  share = ibm_is_share.sap_fs.id
+  vpc   = var.vpc_id
+  name  = local.share_name
+}
+
+data "ibm_is_share_mount_target" "data_mount_target_sap_fs" {
+  depends_on = [ ibm_is_share_mount_target.mount_target_sap_fs ]
+  share        = ibm_is_share.sap_fs.id
+  mount_target = ibm_is_share_mount_target.mount_target_sap_fs.mount_target
 }

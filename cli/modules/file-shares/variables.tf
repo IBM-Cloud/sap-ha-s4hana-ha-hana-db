@@ -29,15 +29,8 @@ variable "resource_group_id" {
   type        = string
 }
 
-data "local_file" "input" {
-  depends_on = [ null_resource.create_file_share ]
-  filename = "${path.module}/cache/mount_path.tmpl"
-}
-
 locals {
   share_name    = lower ("${var.prefix}-${var.sap_sid}")
-  vpc_api_endpoint = "https://${var.region}.iaas.cloud.ibm.com"
-  mount_path =  chomp(data.local_file.input.content)
 }
 
 variable "sap_sid" {
@@ -60,17 +53,12 @@ variable "ansible_var_name" {
   type        = string
 }
 
-variable "var_timeout" {
-  description = "ansible_var_name for all the resources."
-  type        = string
-}
-
 variable "share_size" {
   description = "Specify the file share size. The value should be between 10 GB to 32000 GB's"
   type        = number
 }
 
 variable "share_profile" {
-  description = "Enter the share profile value. The value should be tier-3iops, tier-5iops and tier-10iops"
+  description = "The profile for File Share Storage. Valid value: dp2."
   type        = string
 }

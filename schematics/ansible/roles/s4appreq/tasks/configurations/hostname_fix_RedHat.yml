@@ -16,4 +16,10 @@
     path: /etc/hosts
     regexp: "^(?!{{ ansible_default_ipv4.address }}.*{{ sap_short_hostname.stdout }})(.*)({{ sap_short_hostname.stdout }}.*)"
     replace: '\1'
+
+- name: Disable ipv6 localhost
+  replace:
+    path: /etc/hosts
+    regexp: '^\:\:1(\s)'
+    replace: '# ::1 \1'
 ...

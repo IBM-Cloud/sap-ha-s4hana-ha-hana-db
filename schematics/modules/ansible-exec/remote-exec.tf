@@ -4,7 +4,7 @@ resource "null_resource" "ansible-exec" {
       type = "ssh"
       user = "root"
       host = var.BASTION_FLOATING_IP
-      private_key = var.private_ssh_key
+      private_key = var.PRIVATE_SSH_KEY
       timeout = "2m"
     }
 
@@ -124,9 +124,31 @@ resource "null_resource" "ansible-logs4" {
 
 }
 
-resource "null_resource" "ansible-errors" {
+resource "null_resource" "ansible-logs5" {
 
     depends_on	= [ null_resource.ansible-logs4 ]
+
+    provisioner "local-exec" {
+          command = "ssh -o 'StrictHostKeyChecking no' -i ansible/id_rsa root@${var.BASTION_FLOATING_IP} 'export IP=${var.IP}; export SAP_DEPLOYMENT=${local.SAP_DEPLOYMENT}; timeout 55m /tmp/${var.IP}.while.sh'"
+          on_failure = continue
+    }
+
+}
+
+resource "null_resource" "ansible-logs6" {
+
+    depends_on	= [ null_resource.ansible-logs5 ]
+
+    provisioner "local-exec" {
+          command = "ssh -o 'StrictHostKeyChecking no' -i ansible/id_rsa root@${var.BASTION_FLOATING_IP} 'export IP=${var.IP}; export SAP_DEPLOYMENT=${local.SAP_DEPLOYMENT}; timeout 55m /tmp/${var.IP}.while.sh'"
+          on_failure = continue
+    }
+
+}
+
+resource "null_resource" "ansible-errors" {
+
+    depends_on	= [ null_resource.ansible-logs6 ]
 
     provisioner "local-exec" {
           command = "ssh -o 'StrictHostKeyChecking no' -i ansible/id_rsa root@${var.BASTION_FLOATING_IP} 'export IP=${var.IP}; export SAP_DEPLOYMENT=${local.SAP_DEPLOYMENT}; timeout 5s /tmp/${var.IP}.error.sh'"
@@ -143,7 +165,7 @@ resource "null_resource" "ansible-delete-sensitive-data" {
         type = "ssh"
         user = "root"
         host = var.BASTION_FLOATING_IP
-        private_key = var.private_ssh_key
+        private_key = var.PRIVATE_SSH_KEY
         timeout = "1m"
      }
 

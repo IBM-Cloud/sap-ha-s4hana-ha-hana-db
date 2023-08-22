@@ -17,7 +17,7 @@ resource "ibm_dns_resource_record" "cname-ascs" {
   instance_id = ibm_resource_instance.dns_inst.guid
   zone_id     = ibm_dns_zone.ha_zone.zone_id
   type        = "CNAME"
-  name        = var.ASCS-VIRT-HOSTNAME
+  name        = var.ASCS_VIRT_HOSTNAME
   rdata       = "${var.ALB_ASCS_HOSTNAME}"
   ttl         = 43200
 }
@@ -26,7 +26,7 @@ resource "ibm_dns_resource_record" "cname-ers" {
   instance_id = ibm_resource_instance.dns_inst.guid
   zone_id     = ibm_dns_zone.ha_zone.zone_id
   type        = "CNAME"
-  name        = var.ERS-VIRT-HOSTNAME
+  name        = var.ERS_VIRT_HOSTNAME
   rdata       = "${var.ALB_ERS_HOSTNAME}"
   ttl         = 43200
 }
@@ -35,7 +35,7 @@ resource "ibm_dns_resource_record" "cname-hana" {
   instance_id = ibm_resource_instance.dns_inst.guid
   zone_id     = ibm_dns_zone.ha_zone.zone_id
   type        = "CNAME"
-  name        = var.HANA-VIRT-HOSTNAME
+  name        = var.HANA_VIRT_HOSTNAME
   rdata       = "${var.ALB_HANA_HOSTNAME}"
   ttl         = 43200
 }

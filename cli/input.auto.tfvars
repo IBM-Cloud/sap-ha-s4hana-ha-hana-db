@@ -18,15 +18,15 @@ DOMAIN_NAME = "example.com"
 # You can't use a domain name that is already in use.
 # Domain names are not case sensitive.
 
-ASCS-VIRT-HOSTNAME = "sapascs"
-# ASCS Virtual hostname​
+ASCS_VIRT_HOSTNAME = "sapascs"
+# ASCS Virtual Hostname
 # Default =  "sap($your_sap_sid)ascs"
 
-ERS-VIRT-HOSTNAME =  "sapers"
-# ERS Virtual Hostname​  
+ERS_VIRT_HOSTNAME = "sapers"
+# ERS Virtual Hostname
 # Default =  "sap($your_sap_sid)ascs"
 
-HANA-VIRT-HOSTNAME = "dbhana"
+HANA_VIRT_HOSTNAME = "dbhana"
 # Hana Virtual Hostname
 # Default = "db($your_hana_sid)hana"
 
@@ -55,125 +55,130 @@ SSH_KEYS = [ "r010-57bfc315-f9e5-46bf-bf61-d87a24a9ce7a", "r010-3fcd9fe7-d4a7-41
 # File Shares variables:
 ##########################################################
 
-share_profile = "tier-5iops"
-# Enter the IOPs (IOPS per GB) tier for File Share storage. "Enter the IOPs (IOPS per GB) tier for File Share storage.
-# Valid values are: tier-3iops, tier-5iops, tier-10iops.
+SHARE_PROFILE = "dp2"
+# Enter the File Share Storage Profile.
+# More details on https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles&interface=ui#dp2-profile."
 
-# File shares sizes:
-usrsap-as1      = "20"
-usrsap-as2      = "20"
-usrsap-sapascs  = "20"
-usrsap-sapers   = "20"
-usrsap-sapmnt   = "20"
-usrsap-sapsys   = "20"
-usrsap-trans    = "80"
+# Default File shares sizes:
+USRSAP_AS1      = "20"
+USRSAP_AS2      = "20"
+USRSAP_SAPASCS  = "20"
+USRSAP_SAPERS   = "20"
+USRSAP_SAPMNT   = "20"
+USRSAP_SAPSYS   = "20"
+USRSAP_TRANS    = "80"
 # Enter Custom File Shares sizes for SAP mounts.
 
 ##########################################################
 # DB VSI variables:
 ##########################################################
-DB-HOSTNAME-1 = "hanadb-1"
+
+DB_HOSTNAME_1 = "hanadb-1"
 # Hana Cluster VSI1 Hostname.
 # The Hostname for the DB VSI. The hostname should be up to 13 characters, as required by SAP
-# Default: DB-HOSTNAME-1 = "hanadb-$your_hana_sid-1"
+# Default: DB_HOSTNAME_1 = "hanadb-$your_hana_sid-1"
 
-DB-HOSTNAME-2 = "hanadb-2"
+DB_HOSTNAME_2 = "hanadb-2"
 # Hana Cluster VSI2 Hostname.
 # The Hostname for the DB VSI. The hostname should be up to 13 characters, as required by SAP
-# Default: DB-HOSTNAME-2 = "hanadb-$your_hana_sid-2"
+# Default: DB_HOSTNAME_2 = "hanadb-$your_hana_sid-2"
 
-DB-PROFILE = "mx2-16x128"
-# The DB VSI profile. Supported profiles for DB VSI: mx2-16x128. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
+DB_PROFILE = "mx2-16x128"
+# The instance profile used for the HANA VSI. The list of certified profiles for HANA VSIs: https://cloud.ibm.com/docs/sap?topic=sap-hana-iaas-offerings-profiles-intel-vs-vpc
+# Details about all x86 instance profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles).
+# For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check [SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud](https://launchpad.support.sap.com/#/notes/2927211) 
+# Default value: "mx2-16x128"
 
-DB-IMAGE = "ibm-redhat-8-6-amd64-sap-hana-2"
+DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-2"
 # OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-4-amd64-sap-hana-4
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
-# Example: DB-IMAGE = "ibm-redhat-8-4-amd64-sap-hana-4" 
+# Example: DB_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-4" 
 
 ##########################################################
 # SAP APP VSI variables:
 ##########################################################
-APP-HOSTNAME-1 = "sapapp-1"
+
+APP_HOSTNAME_1 = "sapapp-1"
 # SAP Cluster VSI1 Hostname.
 # The Hostname for the SAP APP VSI. The hostname should be up to 13 characters, as required by SAP
-# Default: APP-HOSTNAME-1 = "sapapp-$your_sap_sid-1"
+# Default: APP_HOSTNAME_1 = "sapapp-$your_sap_sid-1"
 
-APP-HOSTNAME-2 = "sapapp-2"
+APP_HOSTNAME_2 = "sapapp-2"
 # SAP Cluster VSI2 Hostname.
 # The Hostname for the SAP APP VSI. The hostname should be up to 13 characters, as required by SAP
-# Default: APP-HOSTNAME-2 = "sapapp-$your_sap_sid-2"
+# Default: APP_HOSTNAME_2 = "sapapp-$your_sap_sid-2"
 
-APP-PROFILE = "bx2-4x16"
+APP_PROFILE = "bx2-4x16"
 # The APP VSI profile. Supported profiles: bx2-4x16. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
-APP-IMAGE = "ibm-redhat-8-6-amd64-sap-hana-2"
+APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-2"
 # OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-4-amd64-sap-hana-4.
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
-# Example: APP-IMAGE = "ibm-redhat-8-4-amd64-sap-hana-4" 
+# Example: APP_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-4" 
 
 ##########################################################
 # SAP HANA configuration
 ##########################################################
 
-hana_sid = "HDB"
+HANA_SID = "HDB"
 # SAP HANA system ID. Should follow the SAP rules for SID naming.
 # Obs. This will be used  also as identification number across different HA name resources. Duplicates are not allowed.
-# Example: hana_sid = "HDB"
+# Example: HANA_SID = "HDB"
 
-hana_sysno = "00"
+HANA_SYSNO = "00"
 # SAP HANA instance number. Should follow the SAP rules for instance number naming.
-# Example: hana_sysno = "00"
+# Example: HANA_SYSNO = "00"
 
-hana_system_usage = "custom"
+HANA_SYSTEM_USAGE = "custom"
 # System usage. Default: custom. Suported values: production, test, development, custom
-# Example: hana_system_usage = "custom"
+# Example: HANA_SYSTEM_USAGE = "custom"
 
-hana_components = "server"
+HANA_COMPONENTS = "server"
 # SAP HANA Components. Default: server. Supported values: all, client, es, ets, lcapps, server, smartda, streaming, rdsync, xs, studio, afl, sca, sop, eml, rme, rtl, trp
-# Example: hana_components = "server"
+# Example: HANA_COMPONENTS = "server"
 
-kit_saphana_file = "/storage/HANADB/51055299.ZIP"
+KIT_SAPHANA_FILE = "/storage/HANADB/51055299.ZIP"
 # SAP HANA Installation kit path
 # Supported SAP HANA versions on Red Hat 8.4, 8.6 and Suse 15.3, 15.4: HANA 2.0 SP 5 Rev 57, kit file: 51055299.ZIP
-# Example for Red Hat 8 or Suse 15: kit_saphana_file = "/storage/HANADB/51055299.ZIP"
+# Example for Red Hat 8 or Suse 15: KIT_SAPHANA_FILE = "/storage/HANADB/51055299.ZIP"
 
 ##########################################################
 # SAP system configuration
 ##########################################################
 
-sap_sid = "S4A"
+SAP_SID = "S4A"
 # SAP System ID
 # Obs. This will be used  also as identification number across different HA name resources. Duplicates are not allowed.
 
-sap_ascs_instance_number = "00"
+SAP_ASCS_INSTANCE_NUMBER = "00"
 # The central ABAP service instance number. Should follow the SAP rules for instance number naming.
-# Example: sap_ascs_instance_number = "00"
+# Example: SAP_ASCS_INSTANCE_NUMBER = "00"
 
-sap_ers_instance_number = "01"
+SAP_ERS_INSTANCE_NUMBER = "01"
 # The enqueue replication server instance number. Should follow the SAP rules for instance number naming.
-# Example: sap_ers_instance_number = "01"
+# Example: SAP_ERS_INSTANCE_NUMBER = "01"
 
-sap_ci_instance_number = "10"
+SAP_CI_INSTANCE_NUMBER = "10"
 # The primary application server instance number. Should follow the SAP rules for instance number naming.
-# Example: sap_ci_instance_number = "10"
+# Example: SAP_CI_INSTANCE_NUMBER = "10"
 
-sap_aas_instance_number = "20"
+SAP_AAS_INSTANCE_NUMBER = "20"
 # The additional application server instance number. Should follow the SAP rules for instance number naming.
-# Example: sap_aas_instance_number = "20"
+# Example: SAP_AAS_INSTANCE_NUMBER = "20"
 
-hdb_concurrent_jobs = "23"
+HDB_CONCURRENT_JOBS = "23"
 # Number of concurrent jobs used to load and/or extract archives to HANA Host
 
 ##########################################################
 # SAP S/4HANA APP Kit Paths
 ##########################################################
 
-kit_sapcar_file = "/storage/S4HANA/SAPCAR_1010-70006178.EXE"
-kit_swpm_file = "/storage/S4HANA/SWPM20SP13_1-80003424.SAR"
-kit_sapexe_file = "/storage/S4HANA/SAPEXE_100-70005283.SAR"
-kit_sapexedb_file = "/storage/S4HANA/SAPEXEDB_100-70005282.SAR"
-kit_igsexe_file = "/storage/S4HANA/igsexe_1-70005417.sar"
-kit_igshelper_file = "/storage/S4HANA/igshelper_17-10010245.sar"
-kit_saphotagent_file = "/storage/S4HANA/SAPHOSTAGENT51_51-20009394.SAR"
-kit_hdbclient_file = "/storage/S4HANA/IMDB_CLIENT20_009_28-80002082.SAR"
-kit_s4hana_export = "/storage/S4HANA/export"
+KIT_SAPCAR_FILE = "/storage/S4HANA/SAPCAR_1010-70006178.EXE"
+KIT_SWPM_FILE = "/storage/S4HANA/SWPM20SP13_1-80003424.SAR"
+KIT_SAPEXE_FILE = "/storage/S4HANA/SAPEXE_100-70005283.SAR"
+KIT_SAPEXEDB_FILE = "/storage/S4HANA/SAPEXEDB_100-70005282.SAR"
+KIT_IGSEXE_FILE = "/storage/S4HANA/igsexe_1-70005417.sar"
+KIT_IGSHELPER_FILE = "/storage/S4HANA/igshelper_17-10010245.sar"
+KIT_SAPHOSTAGENT_FILE = "/storage/S4HANA/SAPHOSTAGENT51_51-20009394.SAR"
+KIT_HDBCLIENT_FILE = "/storage/S4HANA/IMDB_CLIENT20_009_28-80002082.SAR"
+KIT_S4HANA_EXPORT = "/storage/S4HANA/export"

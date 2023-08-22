@@ -1,18 +1,18 @@
 # List SAP PATHS
 resource "local_file" "KIT_SAP_PATHS" {
   content = <<-DOC
-${var.kit_saphana_file}
-${var.kit_sapcar_file}
-${var.kit_swpm_file}
-${var.kit_sapexe_file}
-${var.kit_sapexedb_file}
-${var.kit_igsexe_file}
-${var.kit_igshelper_file}
-${var.kit_saphotagent_file}
-${var.kit_hdbclient_file}
-${var.kit_s4hana_export}/*
+${var.KIT_SAPHANA_FILE}
+${var.KIT_SAPCAR_FILE}
+${var.KIT_SWPM_FILE}
+${var.KIT_SAPEXE_FILE}
+${var.KIT_SAPEXEDB_FILE}
+${var.KIT_IGSEXE_FILE}
+${var.KIT_IGSHELPER_FILE}
+${var.KIT_SAPHOSTAGENT_FILE}
+${var.KIT_HDBCLIENT_FILE}
+${var.KIT_S4HANA_EXPORT}/*
     DOC
-  filename = "modules/precheck-ssh-exec/sap-paths-${local.DB-HOSTNAME-1}"
+  filename = "modules/precheck-ssh-exec/sap-paths-${local.DB_HOSTNAME_1}"
 }
 
 
