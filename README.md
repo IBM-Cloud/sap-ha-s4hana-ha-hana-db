@@ -27,7 +27,7 @@ SAP HANA installation media used for this deployment is the default one for **SA
 
 SAP S/4HANA installation media used for this deployment is the default one for **SAP S/4HANA 2020** available at SAP Support Portal under *INSTALLATION AND UPGRADE* area and it has to be provided manually in the input parameter file.
 
-SAP Software Provisioning Manager used for this solution is **2.0 SP13** and it's recommended to use the same version or higher.
+SAP Software Provisioning Manager used for this solution is **2.0 SP15** and it's recommended to use the same version or higher.
 
 ## VSI Configuration
 The VSIs are configured with Red Hat Enterprise Linux 8 for SAP HANA (amd64)  and they have: at least two SSH keys configured to access as root user and the following storage volumes created for DB and SAP APP VSI:
@@ -186,10 +186,7 @@ SUBNET | The name of an EXISTING Subnet. The list of Subnets is available [here]
 SECURITY_GROUP | The name of an EXISTING Security group. The list of Security Groups is available [here](https://cloud.ibm.com/vpc-ext/network/securityGroups).
 RESOURCE_GROUP | The name of an EXISTING Resource Group for VSIs and Volumes resources. The list of Resource Groups is available [here](https://cloud.ibm.com/account/resource-groups).
 [DB/APP]_HOSTNAMES | SAP HANA/APP Cluster VSI Hostnames. Each hostname should be up to 13 characters as required by SAP.<br> For more information on rules regarding hostnames for SAP systems, check [SAP Note 611361: Hostnames of SAP ABAP Platform servers](https://launchpad.support.sap.com/#/notes/%20611361). <br> Default values: APP_HOSTNAME_1/2 = "sapapp-$your_sap_sid-1/2" ,  DB_HOSTNAME_1/2 = "hanadb-$your_hana_sid-1/2".
-DB_PROFILE | The instance profile used for the HANA VSI. The list of certified profiles for HANA VSIs is available here.
-Details about all x86 instance profiles are available here.
-For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud
-Default value: DB_PROFILE = "mx2-16x128"
+DB_PROFILE | The instance profile used for the HANA VSI. The list of certified profiles for HANA VSIs is available here. <br> Details about all x86 instance profiles are available here. <br> For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud <br> Default value: DB_PROFILE = "mx2-16x128"
 APP_PROFILE | The profile used for the APP VSI. A list of profiles is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles).<br> For more information about supported OS and IBM Gen 2 Virtual Server Instances (VSI), check [SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud](https://launchpad.support.sap.com/#/notes/2927211)<br/> Default value: APP_PROFILE = "bx2-4x16".
 [DB/APP]_IMAGE | The OS image used for the HANA/APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains  the required SAP and HA subscriptions.  A list of images is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-about-images)  <br/> Default value: "ibm-redhat-8-6-amd64-sap-hana-3"
 
