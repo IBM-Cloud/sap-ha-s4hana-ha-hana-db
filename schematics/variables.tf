@@ -155,7 +155,7 @@ variable "DB_PROFILE" {
 variable "DB_IMAGE" {
 	type		= string
 	description = "The OS image used for the HANA/APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains the required SAP and HA subscriptions. A list of images is available here: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images."
-	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
+	default		= "ibm-redhat-8-6-amd64-sap-hana-3"
 }
 
 variable "DB_HOSTNAME_1" {
@@ -196,7 +196,7 @@ variable "APP_PROFILE" {
 variable "APP_IMAGE" {
 	type		= string
 	description = "The OS image used for the APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains the required SAP and HA subscriptions. A list of images is available here: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images."
-	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
+	default		= "ibm-redhat-8-6-amd64-sap-hana-3"
 }
 
 variable "APP_HOSTNAME_1" {
@@ -426,7 +426,7 @@ variable "HANA_COMPONENTS" {
 variable "KIT_SAPHANA_FILE" {
 	type		= string
 	description = "Path to SAP HANA ZIP file, as downloaded from SAP Support Portal."
-	default		= "/storage/HANADB/51055299.ZIP"
+	default		= "/storage/HANADB/51056441.ZIP"
 }
 
 variable "SAP_SID" {
@@ -478,19 +478,19 @@ variable "KIT_SAPCAR_FILE" {
 variable "KIT_SWPM_FILE" {
 	type		= string
 	description = "Path to SWPM archive (SAR), as downloaded from SAP Support Portal."
-	default		= "/storage/S4HANA/SWPM20SP13_1-80003424.SAR"
+	default		= "/storage/S4HANA/SWPM20SP15_5-80003424.SAR"
 }
 
 variable "KIT_SAPEXE_FILE" {
 	type		= string
 	description = "Path to SAP Kernel OS archive (SAR), as downloaded from SAP Support Portal."
-	default		= "/storage/S4HANA/SAPEXE_100-70005283.SAR"
+	default		= "/storage/S4HANA/SAPEXE_300-80005374.SAR"
 }
 
 variable "KIT_SAPEXEDB_FILE" {
 	type		= string
 	description = "Path to SAP Kernel DB archive (SAR), as downloaded from SAP Support Portal."
-	default		= "/storage/S4HANA/SAPEXEDB_100-70005282.SAR"
+	default		= "/storage/S4HANA/SAPEXEDB_300-80005373.SAR"
 }
 
 variable "KIT_IGSEXE_FILE" {
@@ -508,13 +508,13 @@ variable "KIT_IGSHELPER_FILE" {
 variable "KIT_SAPHOSTAGENT_FILE" {
 	type		= string
 	description = "Path to SAP Host Agent archive (SAR), as downloaded from SAP Support Portal."
-	default		= "/storage/S4HANA/SAPHOSTAGENT51_51-20009394.SAR"
+	default		= "/storage/S4HANA/SAPHOSTAGENT61_61-80004822.SAR"
 }
 
 variable "KIT_HDBCLIENT_FILE" {
 	type		= string
 	description = "Path to HANA DB client archive (SAR), as downloaded from SAP Support Portal."
-	default		= "/storage/S4HANA/IMDB_CLIENT20_009_28-80002082.SAR"
+	default		= "/storage/S4HANA/IMDB_CLIENT20_017_22-80002082.SAR"
 }
 
 variable "KIT_S4HANA_EXPORT" {

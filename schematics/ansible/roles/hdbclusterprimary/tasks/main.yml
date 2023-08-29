@@ -1,4 +1,8 @@
 ---
+- name: Pause for 10 minutes to make sure the replication has completed
+  ansible.builtin.pause:
+    minutes: 10
+
 - name: Enable cluster maintenance mode
   shell: |
       pcs property set maintenance-mode=true
@@ -26,4 +30,12 @@
 - name: Disable cluster maintenance mode
   shell: |
       pcs property set maintenance-mode=false
+
+- name: Pause for 10 minutes to make sure the replication has completed
+  ansible.builtin.pause:
+    minutes: 10
+
+- name: Cluster resource Cleanup
+  shell: |
+      pcs resource cleanup SAPHana_{{ hana_sid | upper}}_{{ hana_sysno }}-clone
 ...

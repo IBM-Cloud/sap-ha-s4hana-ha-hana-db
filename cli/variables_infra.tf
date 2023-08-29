@@ -146,7 +146,7 @@ variable "DB_PROFILE" {
 variable "DB_IMAGE" {
 	type		= string
 	description = "DB VSI OS Image"
-	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
+	default		= "ibm-redhat-8-6-amd64-sap-hana-3"
 	validation {
 		condition     = length(regexall("^(ibm-redhat-8-6-amd64-sap-hana|ibm-redhat-8-4-amd64-sap-hana|ibm-sles-15-4-amd64-sap-hana|ibm-sles-15-3-amd64-sap-hana)-[0-9][0-9]*", var.DB_IMAGE)) > 0
 		error_message = "The OS SAP DB_IMAGE must be one of  \"ibm-sles-15-4-amd64-sap-hana-x\", \"ibm-sles-15-3-amd64-sap-hana-x\", \"ibm-redhat-8-6-amd64-sap-hana-x\" or \"ibm-redhat-8-4-amd64-sap-hana-x\"."
@@ -191,7 +191,7 @@ variable "APP_PROFILE" {
 variable "APP_IMAGE" {
 	type		= string
 	description = "VSI OS Image"
-	default		= "ibm-redhat-8-6-amd64-sap-hana-2"
+	default		= "ibm-redhat-8-6-amd64-sap-hana-3"
 }
 
 variable "APP_HOSTNAME_1" {

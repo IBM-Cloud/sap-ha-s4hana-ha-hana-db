@@ -114,8 +114,9 @@ SSH_KEYS = [ "r010-57bfc315-f9e5-46bf-bf61-d87a24a9ce7a", "r010-3fcd9fe7-d4a7-41
 # File Shares variables:
 ##########################################################
 
-SHARE_PROFILE = "tier-5iops"
-# Enter the IOPs (IOPS per GB) tier for File Share storage. Valid values are 3, 5, and 10.
+SHARE_PROFILE = "dp2"
+# Enter the File Share Storage Profile.
+# More details on https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles&interface=ui#dp2-profile.
 
 # File shares sizes:
 USRSAP_AS1      = "20"
@@ -143,7 +144,7 @@ DB_HOSTNAME_2 = "hanadb-2"
 DB_PROFILE = "mx2-16x128"
 # The DB VSI profile. Supported profiles for DB VSI: mx2-16x128. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
-DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-2"
+DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-3"
 # OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-4-amd64-sap-hana-4
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
 # Example: DB_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-4" 
@@ -164,7 +165,7 @@ APP_HOSTNAME_2 = "sapapp-2"
 APP_PROFILE = "bx2-4x16"
 # The APP VSI profile. Supported profiles: bx2-4x16. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
-APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-2"
+APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-3"
 # OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-4-amd64-sap-hana-4.
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
 # Example: APP_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-4" 
@@ -177,16 +178,20 @@ SSH_KEYS | List of SSH Keys IDs that are allowed to SSH as root to the VSI. Can 
 REGION | The cloud region where to deploy the solution. <br /> The regions and zones for VPC are listed [here](https://cloud.ibm.com/docs/containers?topic=containers-regions-and-zones#zones-vpc). <br /> Sample value: eu-de.
 ZONE | The cloud zone where to deploy the solution. <br /> Sample value: eu-de-2.
 DOMAIN_NAME | The Domain Name used for DNS and ALB. Duplicates are not allowed. The list with DNS resources can be searched [here](https://cloud.ibm.com/resources). <br />  Sample value:  "example.com"
-SHARE PROFILES | IOPS per GB tier for File Share storage. Valid values are 3, 5, and 10. For more info about file share profiles, check [here](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles). <br/> Default value:  SHARE_PROFILE = "tier-5iops".
+SHARE_PROFILE | File Share Storage Profile. More details [here](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles&interface=ui#dp2-profile). <br/> Default value:  SHARE_PROFILE = "dp2".
 SHARE SIZES | Custom File Shares Sizes for SAP mounts. Sample values:  USRSAP_SAPMNT   = "20" , USRSAP_TRANS    = "80".
-[DB/APP]- <br />VIRT-HOSTNAMES | ASCS/ERS/HANA virtual hostnames.  <br /> Default values:  "sap($your_sap_sid)ascs/ers" , "sap($your_sap_sid)ers" , "db($your_hana_sid)hana".
+[DB/APP]_ <br />VIRT_HOSTNAMES | ASCS/ERS/HANA virtual hostnames.  <br /> Default values:  "sap($your_sap_sid)ascs/ers" , "sap($your_sap_sid)ers" , "db($your_hana_sid)hana".
 VPC | The name of an EXISTING VPC. The list of VPCs is available [here](https://cloud.ibm.com/vpc-ext/network/vpcs)
 SUBNET | The name of an EXISTING Subnet. The list of Subnets is available [here](https://cloud.ibm.com/vpc-ext/network/subnets). 
 SECURITY_GROUP | The name of an EXISTING Security group. The list of Security Groups is available [here](https://cloud.ibm.com/vpc-ext/network/securityGroups).
 RESOURCE_GROUP | The name of an EXISTING Resource Group for VSIs and Volumes resources. The list of Resource Groups is available [here](https://cloud.ibm.com/account/resource-groups).
-[DB/APP]-HOSTNAMES | SAP HANA/APP Cluster VSI Hostnames. Each hostname should be up to 13 characters as required by SAP.<br> For more information on rules regarding hostnames for SAP systems, check [SAP Note 611361: Hostnames of SAP ABAP Platform servers](https://launchpad.support.sap.com/#/notes/%20611361). <br> Default values: APP_HOSTNAME_1/2 = "sapapp-$your_sap_sid-1/2" ,  DB_HOSTNAME_1/2 = "hanadb-$your_hana_sid-1/2".
-[DB/APP]-PROFILES | The profile used for the HANA/APP VSI. A list of profiles is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles).<br> For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check [SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud](https://launchpad.support.sap.com/#/notes/2927211)
-[DB/APP]-IMAGE | The OS image used for the HANA/APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains  the required SAP and HA subscriptions.  A list of images is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-about-images)
+[DB/APP]_HOSTNAMES | SAP HANA/APP Cluster VSI Hostnames. Each hostname should be up to 13 characters as required by SAP.<br> For more information on rules regarding hostnames for SAP systems, check [SAP Note 611361: Hostnames of SAP ABAP Platform servers](https://launchpad.support.sap.com/#/notes/%20611361). <br> Default values: APP_HOSTNAME_1/2 = "sapapp-$your_sap_sid-1/2" ,  DB_HOSTNAME_1/2 = "hanadb-$your_hana_sid-1/2".
+DB_PROFILE | The instance profile used for the HANA VSI. The list of certified profiles for HANA VSIs is available here.
+Details about all x86 instance profiles are available here.
+For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud
+Default value: DB_PROFILE = "mx2-16x128"
+APP_PROFILE | The profile used for the APP VSI. A list of profiles is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles).<br> For more information about supported OS and IBM Gen 2 Virtual Server Instances (VSI), check [SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud](https://launchpad.support.sap.com/#/notes/2927211)<br/> Default value: APP_PROFILE = "bx2-4x16".
+[DB/APP]_IMAGE | The OS image used for the HANA/APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains  the required SAP and HA subscriptions.  A list of images is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-about-images)  <br/> Default value: "ibm-redhat-8-6-amd64-sap-hana-3"
 
 Edit your SAP system configuration variables that will be passed to the ansible automated deployment:
 
@@ -208,10 +213,10 @@ HANA_COMPONENTS = "server"
 # SAP HANA Components. Default: server. Supported values: all, client, es, ets, lcapps, server, smartda, streaming, rdsync, xs, studio, afl, sca, sop, eml, rme, rtl, trp
 # Example: HANA_COMPONENTS = "server"
 
-KIT_SAPHANA_FILE = "/storage/HANADB/51055299.ZIP"
+KIT_SAPHANA_FILE = "/storage/HANADB/51056441.ZIP"
 # SAP HANA Installation kit path
 # Supported SAP HANA versions on Red Hat 8.4, 8.6 and Suse 15.3, 15.4: HANA 2.0 SP 5 Rev 57, kit file: 51055299.ZIP
-# Example for Red Hat 8 or Suse 15: KIT_SAPHANA_FILE = "/storage/HANADB/51055299.ZIP"
+# Example for Red Hat 8 or Suse 15: KIT_SAPHANA_FILE = "/storage/HANADB/51056441.ZIP"
 
 ##########################################################
 # SAP system configuration
@@ -245,13 +250,13 @@ HDB_CONCURRENT_JOBS = "23"
 ##########################################################
 
 KIT_SAPCAR_FILE = "/storage/S4HANA/SAPCAR_1010-70006178.EXE"
-KIT_SWPM_FILE = "/storage/S4HANA/SWPM20SP13_1-80003424.SAR"
-KIT_SAPEXE_FILE = "/storage/S4HANA/SAPEXE_100-70005283.SAR"
-KIT_SAPEXEDB_FILE = "/storage/S4HANA/SAPEXEDB_100-70005282.SAR"
+KIT_SWPM_FILE = "/storage/S4HANA/SWPM20SP15_5-80003424.SAR"
+KIT_SAPEXE_FILE = "/storage/S4HANA/SAPEXE_300-80005374.SAR"
+KIT_SAPEXEDB_FILE = "/storage/S4HANA/SAPEXEDB_300-80005373.SAR"
 KIT_IGSEXE_FILE = "/storage/S4HANA/igsexe_1-70005417.sar"
 KIT_IGSHELPER_FILE = "/storage/S4HANA/igshelper_17-10010245.sar"
-KIT_SAPHOSTAGENT_FILE = "/storage/S4HANA/SAPHOSTAGENT51_51-20009394.SAR"
-KIT_HDBCLIENT_FILE = "/storage/S4HANA/IMDB_CLIENT20_009_28-80002082.SAR"
+KIT_SAPHOSTAGENT_FILE = "/storage/S4HANA/SAPHOSTAGENT61_61-80004822.SAR"
+KIT_HDBCLIENT_FILE = "/storage/S4HANA/IMDB_CLIENT20_017_22-80002082.SAR"
 KIT_S4HANA_EXPORT = "/storage/S4HANA/export"
 
 ```
