@@ -1,0 +1,13 @@
+---
+- name: Create /usr/sap/lib directory
+  file:
+    path: /usr/sap/lib
+    state: directory
+    mode: 0775
+
+- name: Create symlink to compat library
+  file:
+    src: /opt/rh/SAP/lib64/compat-sap-c++-10.so
+    dest: /usr/sap/lib/libstdc++.so.6
+    state: link
+...

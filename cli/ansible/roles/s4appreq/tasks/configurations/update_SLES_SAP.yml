@@ -1,6 +1,0 @@
----
-- name: Update all packages # noqa 403
-  zypper:
-    name: '*'
-    state: latest
-...

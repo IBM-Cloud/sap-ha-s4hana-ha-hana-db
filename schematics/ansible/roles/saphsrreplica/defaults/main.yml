@@ -1,4 +1,0 @@
----
-replication_mode: "sync" #[sync|syncmem|async]
-operation_mode: "logreplay" #[delta_datashipping|logreplay|logreplay_readaccess]
-...

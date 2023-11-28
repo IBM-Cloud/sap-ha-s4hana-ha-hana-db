@@ -1,0 +1,12 @@
+---
+ap_required_packages:
+  - "compat-sap-c++-10"
+
+ap_required_configurations:
+  - "reqpkg"
+  - "kernel_RedHat8"
+  - "tmpfs"
+  - "limits"
+  - "compatlibs"
+  - "reboot"
+... 

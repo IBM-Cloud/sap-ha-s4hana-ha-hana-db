@@ -1,0 +1,12 @@
+---
+saphana_required_packages:
+
+saphana_required_configurations:
+  - "reqpkg"
+  - "kernel_SLES_SAP15"
+  - "filesystems"
+  - "tmpfs"
+  - "saptune"
+  - "limits"
+  - "reboot"
+... 
