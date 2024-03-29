@@ -1,7 +1,7 @@
 ---
 - name: Generate parameter file for sapinst
   template:
-      src: dbinstance.cfg
+      src: dbinstance_{{ s4hana_version }}.cfg
       dest: "{{ sap_kit }}/dbinstance.params"
 
 - name: Start SAP DB instance installation

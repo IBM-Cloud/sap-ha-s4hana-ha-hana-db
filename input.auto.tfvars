@@ -107,8 +107,8 @@ DB_PROFILE = "mx2-16x128"
 # For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check [SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud](https://launchpad.support.sap.com/#/notes/2927211) 
 # Default value: "mx2-16x128"
 
-DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-4"
-# OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-6-amd64-sap-hana-4, ibm-redhat-8-4-amd64-sap-hana-7
+DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-5"
+# OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-7
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
 # Example: DB_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-7" 
 
@@ -129,8 +129,8 @@ APP_HOSTNAME_2 = "sapapp-2"
 APP_PROFILE = "bx2-4x16"
 # The APP VSI profile. Supported profiles: bx2-4x16. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
-APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-4"
-# OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-6-amd64-sap-hana-4, ibm-redhat-8-4-amd64-sap-hana-7.
+APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-5"
+# OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-7.
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
 # Example: APP_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-7" 
 
@@ -141,6 +141,14 @@ APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-4"
 ATR_NAME = ""
 # The name of the EXISTING Activity Tracker instance, in the same region chosen for SAP system deployment.
 # Example: ATR_NAME="Activity-Tracker-SAP-eu-de"
+
+##########################################################
+# S/4HANA version
+##########################################################
+
+S4HANA_VERSION = "2023"
+# The version of S/4HANA. Supported values: 2023, 2022, 2021, 2020.
+# Example: S4HANA_VERSION = "2022"
 
 ##########################################################
 # SAP HANA configuration
@@ -163,10 +171,11 @@ HANA_COMPONENTS = "server"
 # SAP HANA Components. Default: server. Supported values: all, client, es, ets, lcapps, server, smartda, streaming, rdsync, xs, studio, afl, sca, sop, eml, rme, rtl, trp
 # Example: HANA_COMPONENTS = "server"
 
-KIT_SAPHANA_FILE = "/storage/HANADB/51056441.ZIP"
+KIT_SAPHANA_FILE = "/storage/HANADB/51057281.ZIP"
 # SAP HANA Installation kit path
-# Supported SAP HANA versions on Red Hat 8.4, 8.6 and Suse 15.3, 15.4: HANA 2.0 SP 5 Rev 57, kit file: 51055299.ZIP
-# Example for Red Hat 8 or Suse 15: KIT_SAPHANA_FILE = "/storage/HANADB/51056441.ZIP"
+# Validated SAP HANA versions for S/4HANA 2023 on Red Hat 8: HANA 2.0 SP 7 Rev 73, kit file: 51057281.ZIP
+# Validated SAP HANA versions for S/4HANA 2022, 2021, 2020 on Red Hat 8: HANA 2.0 SP 5 Rev 57, kit file: 51056441.ZIP
+# Example for Red Hat 8: KIT_SAPHANA_FILE = "/storage/HANADB/51056441.ZIP"
 
 ##########################################################
 # SAP system configuration
@@ -200,11 +209,11 @@ HDB_CONCURRENT_JOBS = "23"
 ##########################################################
 
 KIT_SAPCAR_FILE = "/storage/S4HANA/SAPCAR_1010-70006178.EXE"
-KIT_SWPM_FILE = "/storage/S4HANA/SWPM20SP15_5-80003424.SAR"
-KIT_SAPEXE_FILE = "/storage/S4HANA/KERNEL/785/SAPEXE_300-80005374.SAR"
-KIT_SAPEXEDB_FILE = "/storage/S4HANA/KERNEL/785/SAPEXEDB_300-80005373.SAR"
-KIT_IGSEXE_FILE = "/storage/S4HANA/KERNEL/785/igsexe_3-70005417.sar"
+KIT_SWPM_FILE = "/storage/S4HANA/SWPM20SP17_0-80003424.SAR"
+KIT_SAPEXE_FILE = "/storage/S4HANA/KERNEL/793/SAPEXE_60-70007807.SAR"
+KIT_SAPEXEDB_FILE = "/storage/S4HANA/KERNEL/793/SAPEXEDB_60-70007806.SAR"
+KIT_IGSEXE_FILE = "/storage/S4HANA/KERNEL/793/igsexe_4-70005417.sar"
 KIT_IGSHELPER_FILE = "/storage/S4HANA/igshelper_17-10010245.sar"
 KIT_SAPHOSTAGENT_FILE = "/storage/S4HANA/SAPHOSTAGENT61_61-80004822.SAR"
-KIT_HDBCLIENT_FILE = "/storage/S4HANA/IMDB_CLIENT20_017_22-80002082.SAR"
-KIT_S4HANA_EXPORT = "/storage/S4HANA/export"
+KIT_HDBCLIENT_FILE = "/storage/S4HANA/IMDB_CLIENT20_018_27-80002082.SAR"
+KIT_S4HANA_EXPORT = "/storage/S4HANA/2023"

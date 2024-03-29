@@ -4,7 +4,7 @@
   become: true
   become_user: "{{ hana_sid | lower }}adm"
   register: hdbstatus
-  until: hana_db_status_ok in hdbstatus.stdout
+  until: hana_db_status_ok in (hdbstatus.stdout| regex_replace('\s+', ''))
   retries: "{{ task_retries }}"
   delay: "{{ task_delay }}"
 ...

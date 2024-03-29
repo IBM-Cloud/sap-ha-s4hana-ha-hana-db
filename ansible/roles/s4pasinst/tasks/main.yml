@@ -1,7 +1,7 @@
 ---
 - name: Generate parameter file for sapinst
   template:
-      src: pasconfig.cfg
+      src: pasconfig_{{ s4hana_version }}.cfg
       dest: "{{ sap_kit }}/pasconfig.params"
 
 - name: Start SAP NW PAS installation

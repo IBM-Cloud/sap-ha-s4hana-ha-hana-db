@@ -22,6 +22,13 @@
   register: standbystop
   changed_when: "'StopSystem' in standbystop.stdout"
 
+- name: Wait for the existing connections
+  shell: netstat -atn
+  register: connection_result
+  until: connection_result.stdout.find("127.0.0.1") == -1 and (hdb_iphost1 not in connection_result.stdout)
+  retries: 100
+  delay: 10
+
 - name: Enable HSR on standby node
   shell: |
       source /usr/sap/{{ hana_sid | upper }}/home/.sapenv.sh && \

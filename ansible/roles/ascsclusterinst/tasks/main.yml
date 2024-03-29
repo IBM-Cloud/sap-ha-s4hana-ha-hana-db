@@ -30,7 +30,7 @@
 
 - name: Generate parameter file for sapinst
   template:
-      src: ascsconfig.cfg
+      src: ascsconfig_{{ s4hana_version }}.cfg
       dest: "{{ sap_kit }}/ascsconfig.params"
 
 - name: Start SAP NW ASCS installation

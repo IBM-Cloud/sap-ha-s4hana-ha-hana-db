@@ -1,6 +1,6 @@
 ---
 #Sapinst product-id
-sap_product_id: "NW_ERS:S4HANA2020.CORE.HDB.ABAPHA"
+sap_product_id: "NW_ERS:S4HANA{{ s4hana_version }}.CORE.HDB.ABAPHA"
 sapusers_product_id: "NW_Users"
 
 #Target files location

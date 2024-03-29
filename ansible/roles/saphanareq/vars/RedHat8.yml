@@ -25,6 +25,7 @@ saphana_required_packages:
   - xorg-x11-xauth
   - compat-sap-c++-9
   - compat-sap-c++-10
+  - compat-sap-c++-11
 
 saphana_required_configurations:
   - "reqpkg"

@@ -68,9 +68,9 @@ In order to track the events specific to the resources deployed by this solution
 ## 1.1 Installation media
 SAP HANA installation media used for this deployment is the default one for **SAP HANA, platform edition 2.0 SPS05** available at SAP Support Portal under *INSTALLATION AND UPGRADE* area and it has to be provided manually in the input parameter file.
 
-SAP S/4HANA installation media used for this deployment is the default one for **SAP S/4HANA 2020** available at SAP Support Portal under *INSTALLATION AND UPGRADE* area and it has to be provided manually in the input parameter file.
+SAP S/4HANA installation media used for this deployment is the default one for **SAP S/4HANA 2023** available at SAP Support Portal under *INSTALLATION AND UPGRADE* area and it has to be provided manually in the input parameter file.
 
-SAP Software Provisioning Manager used for this solution is **2.0 SP15** and it's recommended to use the same version or higher.
+SAP Software Provisioning Manager used for S/4HANA 2023 is **2.0 SP17** and it's recommended to use the same version or higher.
 
 ## 1.2 Prerequisites
 
@@ -140,7 +140,7 @@ SHARE SIZES | Custom File Shares Sizes for SAP mounts. Sample values:  USRSAP_SA
 [DB/APP]_HOSTNAMES | SAP HANA/APP VSI Hostnames, in HANA/SAP cluster. Each hostname should be up to 13 characters as required by SAP.<br> For more information on rules regarding hostnames for SAP systems, check [SAP Note 611361: Hostnames of SAP ABAP Platform servers](https://launchpad.support.sap.com/#/notes/%20611361). <br> If the default values are used, they will be automatically converted to: : DB_HOSTNAME_1/2 = "hanadb-<hana_sid>-1/2", APP_HOSTNAME_1/2 = "sapapp-<sap_sid>-1/2".
 DB_PROFILE | The instance profile used for the HANA VSI. The list of certified profiles for HANA VSIs is available here. <br> Details about all x86 instance profiles are available here. <br> For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud <br> Default value: DB_PROFILE = "mx2-16x128"
 APP_PROFILE | The profile used for the APP VSI. A list of profiles is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles).<br> For more information about supported OS and IBM Gen 2 Virtual Server Instances (VSI), check [SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud](https://launchpad.support.sap.com/#/notes/2927211)<br/> Default value: APP_PROFILE = "bx2-4x16".
-[DB/APP]_IMAGE | The OS image used for the HANA/APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains  the required SAP and HA subscriptions.  A list of images is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-about-images)  <br/> Default value: "ibm-redhat-8-6-amd64-sap-hana-4"
+[DB/APP]_IMAGE | The OS image used for the HANA/APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains  the required SAP and HA subscriptions.  A list of images is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-about-images)  <br/> Default value: "ibm-redhat-8-6-amd64-sap-hana-5"
 
 **Activity Tracker input parameters:**
 
@@ -152,6 +152,7 @@ ATR_NAME | The name of the EXISTING Activity Tracker instance, in the same regio
 
 Parameter | Description | Requirements
 ----------|-------------|-------------
+S4HANA_VERSION | The version of S/4HANA. | Supported values: 2023, 2022, 2021, 2020.
 HANA_SID | The SAP system ID identifies the SAP HANA system.<br /> _(See Obs.*)_ | <ul><li>Consists of exactly three alphanumeric characters</li><li>Has a letter for the first character</li><li>Does not include any of the reserved IDs listed in SAP Note 1979280</li></ul>|
 HANA_SYSNO | Specifies the instance number of the SAP HANA system| <ul><li>Two-digit number from 00 to 97</li><li>Must be unique on a host</li></ul>
 HANA_SYSTEM_USAGE  | System Usage | Default: custom<br> Valid values: production, test, development, custom
@@ -197,13 +198,81 @@ HA_PASSWORD | HA cluster password | <ul><li>It must be 8 to 14 characters long</
 - The following SAP **"_SID_"** values are _reserved_ and are _not allowed_ to be used: ADD, ALL, AMD, AND, ANY, ARE, ASC, AUX, AVG, BIT, CDC, COM, CON, DBA, END, EPS, FOR, GET, GID, IBM, INT, KEY, LOG, LPT, MAP, MAX, MIN, MON, NIX, NOT, NUL, OFF, OLD, OMS, OUT, PAD, PRN, RAW, REF, ROW, SAP, SET, SGA, SHG, SID, SQL, SUM, SYS, TMP, TOP, UID, USE, USR, VAR".
  - For any manual change in the terraform code, you have to make sure that you use a certified image based on the SAP NOTE: 2927211.
 
-
 **Installation media validated for this solution:**
+
+---
+S/4HANA 2023
+---
 
 Component | Version | Filename
 ----------|-------------|-------------
+SAPCAR | 7.22 | SAPCAR_1010-70006178.EXE
+SOFTWARE PROVISIONING MGR | 2.0 SP17 PL 0 | SWPM20SP17_0-80003424.SAR
+SAP KERNEL | 7.93 64-BIT UNICODE | SAPEXE_60-70007807.SAR<br> SAPEXEDB_60-70007806.SAR
+SAP IGS | 7.81 PL 4 | igsexe_4-70005417.sar
+SAP IGS HELPER | PL 17 | igshelper_17-10010245.sar
+SAP HOST AGENT | 7.22 SP61 | SAPHOSTAGENT61_61-80004822.SAR
+HANA CLIENT | 2.18 | IMDB_CLIENT20_018_27-80002082.SAR
+HANA DB | 2.0 SPS07 rev73 | 51057281.ZIP
+
+**OS images validated for this solution:**
+
+OS version | Image | Role
+-----------|-----------|-----------
+Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-5 | DB/APP
+Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-9 | DB/APP
+
+---
+S/4HANA 2022
+---
+
+Component | Version | Filename
+----------|-------------|-------------
+SAPCAR | 7.22 | SAPCAR_1010-70006178.EXE
 SOFTWARE PROVISIONING MGR | 2.0 SP15 PL 5 | SWPM20SP15_5-80003424.SAR
-SAP KERNEL | 7.85 64-BIT UNICODE PL 300| SAPEXE_300-80005374.SAR SAPEXEDB_300-80005373.SAR
+SAP KERNEL | 7.89 64-BIT UNICODE PL 200| SAPEXE_200-70006642.SAR<br> SAPEXEDB_200-70006641.SAR
+SAP IGS | 7.81 PL 4 | igsexe_4-70005417.sar
+SAP IGS HELPER | PL 17 | igshelper_17-10010245.sar
+SAP HOST AGENT | 7.22 SP61 | SAPHOSTAGENT61_61-80004822.SAR
+HANA CLIENT | 2.18 | IMDB_CLIENT20_018_27-80002082.SAR
+HANA DB | 2.0 SPS05 rev59.05 | 51056441.ZIP
+
+**OS images validated for this solution:**
+
+OS version | Image | Role
+-----------|-----------|-----------
+Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-5 | DB/APP
+
+---
+S/4HANA 2021
+---
+
+Component | Version | Filename
+----------|-------------|-------------
+SAPCAR | 7.22 | SAPCAR_1010-70006178.EXE
+SOFTWARE PROVISIONING MGR | 2.0 SP15 PL 5 | SWPM20SP15_5-80003424.SAR
+SAP KERNEL | 7.89 64-BIT UNICODE PL 200| SAPEXE_200-70006642.SAR<br> SAPEXEDB_200-70006641.SAR
+SAP IGS | 7.81 PL 4 | igsexe_4-70005417.sar
+SAP IGS HELPER | PL 17 | igshelper_17-10010245.sar
+SAP HOST AGENT | 7.22 SP61 | SAPHOSTAGENT61_61-80004822.SAR
+HANA CLIENT | 2.18 | IMDB_CLIENT20_018_27-80002082.SAR
+HANA DB | 2.0 SPS05 rev59.05 | 51056441.ZIP
+
+**OS images validated for this solution:**
+
+OS version | Image | Role
+-----------|-----------|-----------
+Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-5 | DB/APP
+
+---
+S/4HANA 2020
+---
+
+Component | Version | Filename
+----------|-------------|-------------
+SAPCAR | 7.22 | SAPCAR_1010-70006178.EXE
+SOFTWARE PROVISIONING MGR | 2.0 SP15 PL 5 | SWPM20SP15_5-80003424.SAR
+SAP KERNEL | 7.85 64-BIT UNICODE PL 300| SAPEXE_300-80005374.SAR<br> SAPEXEDB_300-80005373.SAR
 SAP IGS | 7.81 PL 3 | igsexe_3-70005417.sar
 SAP IGS HELPER | PL 17 | igshelper_17-10010245.sar
 SAP HOST AGENT | 7.22 SP61 | SAPHOSTAGENT61_61-80004822.SAR
@@ -214,8 +283,8 @@ HANA DB | 2.0 SPS05 rev59.05 | 51056441.ZIP
 
 OS version | Image | Role
 -----------|-----------|-----------
-Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-4 | APP/DB
-Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-7 | APP/DB
+Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-5 | DB/APP
+Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-7 | DB/APP
 
 **Terraform version used to validate this solution:**
 
@@ -395,8 +464,8 @@ DB_PROFILE = "mx2-16x128"
 # For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check [SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud](https://launchpad.support.sap.com/#/notes/2927211) 
 # Default value: "mx2-16x128"
 
-DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-4"
-# OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-6-amd64-sap-hana-4, ibm-redhat-8-4-amd64-sap-hana-7
+DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-5"
+# OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-7
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
 # Example: DB_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-7" 
 
@@ -417,8 +486,8 @@ APP_HOSTNAME_2 = "sapapp-2"
 APP_PROFILE = "bx2-4x16"
 # The APP VSI profile. Supported profiles: bx2-4x16. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
-APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-4"
-# OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-6-amd64-sap-hana-4, ibm-redhat-8-4-amd64-sap-hana-7.
+APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-5"
+# OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-7.
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
 # Example: APP_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-7" 
 
@@ -429,6 +498,14 @@ APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-4"
 ATR_NAME = "Activity-Tracker-SAP-eu-de"
 # The name of the EXISTING Activity Tracker instance, in the same region chosen for SAP system deployment.
 # Example: ATR_NAME="Activity-Tracker-SAP-eu-de"
+
+##########################################################
+# S/4HANA version
+##########################################################
+
+S4HANA_VERSION = "2023"
+# The version of S/4HANA. Supported values: 2023, 2022, 2021, 2020.
+# Example: S4HANA_VERSION = "2022"
 
 ##########################################################
 # SAP HANA configuration
@@ -451,10 +528,11 @@ HANA_COMPONENTS = "server"
 # SAP HANA Components. Default: server. Supported values: all, client, es, ets, lcapps, server, smartda, streaming, rdsync, xs, studio, afl, sca, sop, eml, rme, rtl, trp
 # Example: HANA_COMPONENTS = "server"
 
-KIT_SAPHANA_FILE = "/storage/HANADB/51056441.ZIP"
+KIT_SAPHANA_FILE = "/storage/HANADB/51057281.ZIP"
 # SAP HANA Installation kit path
-# Supported SAP HANA versions on Red Hat 8.4, 8.6 and Suse 15.3, 15.4: HANA 2.0 SP 5 Rev 57, kit file: 51055299.ZIP
-# Example for Red Hat 8 or Suse 15: KIT_SAPHANA_FILE = "/storage/HANADB/51056441.ZIP"
+# Validated SAP HANA versions for S/4HANA 2023 on Red Hat 8: HANA 2.0 SP 7 Rev 73, kit file: 51057281.ZIP
+# Validated SAP HANA versions for S/4HANA 2022, 2021, 2020 on Red Hat 8: HANA 2.0 SP 5 Rev 57, kit file: 51056441.ZIP
+# Example for Red Hat 8: KIT_SAPHANA_FILE = "/storage/HANADB/51056441.ZIP"
 
 ##########################################################
 # SAP system configuration
@@ -488,14 +566,14 @@ HDB_CONCURRENT_JOBS = "23"
 ##########################################################
 
 KIT_SAPCAR_FILE = "/storage/S4HANA/SAPCAR_1010-70006178.EXE"
-KIT_SWPM_FILE = "/storage/S4HANA/SWPM20SP15_5-80003424.SAR"
-KIT_SAPEXE_FILE = "/storage/S4HANA/KERNEL/785/SAPEXE_300-80005374.SAR"
-KIT_SAPEXEDB_FILE = "/storage/S4HANA/KERNEL/785/SAPEXEDB_300-80005373.SAR"
-KIT_IGSEXE_FILE = "/storage/S4HANA/KERNEL/785/igsexe_3-70005417.sar"
+KIT_SWPM_FILE = "/storage/S4HANA/SWPM20SP17_0-80003424.SAR"
+KIT_SAPEXE_FILE = "/storage/S4HANA/KERNEL/793/SAPEXE_60-70007807.SAR"
+KIT_SAPEXEDB_FILE = "/storage/S4HANA/KERNEL/793/SAPEXEDB_60-70007806.SAR"
+KIT_IGSEXE_FILE = "/storage/S4HANA/KERNEL/793/igsexe_4-70005417.sar"
 KIT_IGSHELPER_FILE = "/storage/S4HANA/igshelper_17-10010245.sar"
 KIT_SAPHOSTAGENT_FILE = "/storage/S4HANA/SAPHOSTAGENT61_61-80004822.SAR"
-KIT_HDBCLIENT_FILE = "/storage/S4HANA/IMDB_CLIENT20_017_22-80002082.SAR"
-KIT_S4HANA_EXPORT = "/storage/S4HANA/export"
+KIT_HDBCLIENT_FILE = "/storage/S4HANA/IMDB_CLIENT20_018_27-80002082.SAR"
+KIT_S4HANA_EXPORT = "/storage/S4HANA/2023"
 ```
 
 ## Steps to follow:
@@ -511,7 +589,7 @@ For planning phase:
 ```shell
 terraform plan --out plan1
 # You will be asked for the following sensitive values:
-'IBMCLOUD_API_KEY', 'SAP_MAIN_PASSWORD' HANA_MAIN_PASSWORD, and 'HA_PASSWORD'.
+'IBMCLOUD_API_KEY', 'SAP_MAIN_PASSWORD', 'HANA_MAIN_PASSWORD' and 'HA_PASSWORD'.
 ```
 
 For apply phase:
@@ -525,7 +603,7 @@ For destroy:
 ```shell
 terraform destroy
 # You will be asked for the following sensitive vavalues, as a destroy confirmation phase:
-'IBMCLOUD_API_KEY', 'SAP_MAIN_PASSWORD' HANA_MAIN_PASSWORD, and 'HA_PASSWORD'.
+'IBMCLOUD_API_KEY', 'SAP_MAIN_PASSWORD', 'HANA_MAIN_PASSWORD' and 'HA_PASSWORD'.
 ```
 
 ### 3.1 Related links:

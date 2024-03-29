@@ -35,6 +35,14 @@
     group: root
     mode: 0777
 
+- name: Copy "{{ kit_hdbclient_file }}" kit to target
+  copy:
+    src: "{{ kit_hdbclient_file }}"
+    dest: "{{ sap_kit }}/hdbclient.sar"
+    owner: root
+    group: root
+    mode: 0777
+
 - name: Extract SWPM archive
   command: "{{ sap_kit }}/sapcar -xf {{ sap_kit }}/swpm.sar -R {{ sap_kit }}/swpm"
 ...

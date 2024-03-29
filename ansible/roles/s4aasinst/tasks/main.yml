@@ -1,7 +1,7 @@
 ---
 - name: Generate parameter file for sapinst
   template:
-      src: aasconfig.cfg
+      src: aasconfig_{{ s4hana_version }}.cfg
       dest: "{{ sap_kit }}/aasconfig.params"
 
 - name: Start SAP NW AAS installation

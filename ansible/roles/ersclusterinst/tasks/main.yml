@@ -24,7 +24,7 @@
 
 - name: Generate parameter file for sapinst
   template:
-      src: ersconfig.cfg
+      src: ersconfig_{{ s4hana_version }}.cfg
       dest: "{{ sap_kit }}/ersconfig.params"
 
 - name: Start SAP NW ERS installation

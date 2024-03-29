@@ -1,6 +1,6 @@
 ---
 #Sapinst product-id
-sap_product_id: "NW_DI:S4HANA2020.CORE.HDB.ABAPHA"
+sap_product_id: "NW_DI:S4HANA{{ s4hana_version }}.CORE.HDB.ABAPHA"
 
 #Target files location
 sap_kit: "/usr/sap/kit"
