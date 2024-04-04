@@ -76,7 +76,7 @@ SAP Software Provisioning Manager used for S/4HANA 2023 is **2.0 SP17** and it's
 
 - A Deployment Server (BASTION Server) in the same VPC should exist. For more information, see https://github.com/IBM-Cloud/sap-bastion-setup.
 - From the SAP Portal, download the SAP kits on the Deployment Server. Make note of the download locations. Ansible decompresses all of the archive kits.
-- Create or retrieve an IBM Cloud API key. The API key is used to authenticate with the IBM Cloud platform and to determine your permissions for IBM Cloud services.
+- Create or retrieve an IBM Cloud API key. The API key is used to authenticate with the IBM Cloud platform, determine your permissions for IBM Cloud services and it is required for the functioning of the cluster stonith devices in IBM VPC.
 - Create or retrieve your SSH key ID. You need the 40-digit UUID for the SSH key, not the SSH key name.
 
 ## 1.3 VSI Configuration
@@ -235,13 +235,14 @@ SAP IGS | 7.81 PL 4 | igsexe_4-70005417.sar
 SAP IGS HELPER | PL 17 | igshelper_17-10010245.sar
 SAP HOST AGENT | 7.22 SP61 | SAPHOSTAGENT61_61-80004822.SAR
 HANA CLIENT | 2.18 | IMDB_CLIENT20_018_27-80002082.SAR
-HANA DB | 2.0 SPS05 rev59.05 | 51056441.ZIP
+HANA DB | 2.0 SPS07 rev73 | 51057281.ZIP
 
 **OS images validated for this solution:**
 
 OS version | Image | Role
 -----------|-----------|-----------
 Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-5 | DB/APP
+Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-9 | DB/APP
 
 ---
 S/4HANA 2021
@@ -256,13 +257,14 @@ SAP IGS | 7.81 PL 4 | igsexe_4-70005417.sar
 SAP IGS HELPER | PL 17 | igshelper_17-10010245.sar
 SAP HOST AGENT | 7.22 SP61 | SAPHOSTAGENT61_61-80004822.SAR
 HANA CLIENT | 2.18 | IMDB_CLIENT20_018_27-80002082.SAR
-HANA DB | 2.0 SPS05 rev59.05 | 51056441.ZIP
+HANA DB | 2.0 SPS07 rev73 | 51057281.ZIP
 
 **OS images validated for this solution:**
 
 OS version | Image | Role
 -----------|-----------|-----------
 Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-5 | DB/APP
+Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-9 | DB/APP
 
 ---
 S/4HANA 2020
@@ -283,7 +285,7 @@ HANA DB | 2.0 SPS05 rev59.05 | 51056441.ZIP
 
 OS version | Image | Role
 -----------|-----------|-----------
-Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-5 | DB/APP
+Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-4 | DB/APP
 Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-7 | DB/APP
 
 **Terraform version used to validate this solution:**
@@ -465,9 +467,9 @@ DB_PROFILE = "mx2-16x128"
 # Default value: "mx2-16x128"
 
 DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-5"
-# OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-7
+# OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-9
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
-# Example: DB_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-7" 
+# Example: DB_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-9" 
 
 ##########################################################
 # SAP APP VSI variables:
@@ -487,9 +489,9 @@ APP_PROFILE = "bx2-4x16"
 # The APP VSI profile. Supported profiles: bx2-4x16. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
 APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-5"
-# OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-7.
+# OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-9.
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
-# Example: APP_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-7" 
+# Example: APP_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-9" 
 
 ##########################################################
 # Activity Tracker variables:
