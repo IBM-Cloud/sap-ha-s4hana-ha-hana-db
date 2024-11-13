@@ -46,6 +46,9 @@
 - name: hdbclusterprimary.yml
   ansible.builtin.import_playbook: hdbclusterprimary.yml
 
+- name: hdbpacemaker.yml
+  ansible.builtin.import_playbook: hdbpacemaker.yml
+
 - name: s4pasinst.yml
   ansible.builtin.import_playbook: s4pasinst.yml
 

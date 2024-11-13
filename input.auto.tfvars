@@ -100,17 +100,16 @@ DB_HOSTNAME_2 = "hanadb-2"
 # Default value: "hanadb-2"
 # When the default value is used, the virtual hostname will automatically be changed based on <HANA_SID> to "hanadb-<hana_sid>-2"
 
-
 DB_PROFILE = "mx2-16x128"
 # The instance profile used for the HANA VSI. The list of certified profiles for HANA VSIs: https://cloud.ibm.com/docs/sap?topic=sap-hana-iaas-offerings-profiles-intel-vs-vpc
 # Details about all x86 instance profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles).
 # For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check [SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud](https://launchpad.support.sap.com/#/notes/2927211) 
 # Default value: "mx2-16x128"
 
-DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-5"
-# OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-9
+DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-6"
+# OS image for DB VSI. OS images validated for DB VSIs: ibm-redhat-8-6-amd64-sap-hana-6, ibm-redhat-8-4-amd64-sap-hana-10
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
-# Example: DB_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-9" 
+# Example: DB_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-10" 
 
 ##########################################################
 # SAP APP VSI variables:
@@ -129,18 +128,10 @@ APP_HOSTNAME_2 = "sapapp-2"
 APP_PROFILE = "bx2-4x16"
 # The APP VSI profile. Supported profiles: bx2-4x16. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
-APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-5"
-# OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-9.
+APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-6"
+# OS image for SAP APP VSI. OS images validated for APP VSIs: ibm-redhat-8-6-amd64-sap-hana-6, ibm-redhat-8-4-amd64-sap-hana-10.
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
-# Example: APP_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-9" 
-
-##########################################################
-# Activity Tracker variables:
-##########################################################
-
-ATR_NAME = ""
-# The name of the EXISTING Activity Tracker instance, in the same region chosen for SAP system deployment.
-# Example: ATR_NAME="Activity-Tracker-SAP-eu-de"
+# Example: APP_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-10" 
 
 ##########################################################
 # S/4HANA version
@@ -171,17 +162,17 @@ HANA_COMPONENTS = "server"
 # SAP HANA Components. Default: server. Supported values: all, client, es, ets, lcapps, server, smartda, streaming, rdsync, xs, studio, afl, sca, sop, eml, rme, rtl, trp
 # Example: HANA_COMPONENTS = "server"
 
-KIT_SAPHANA_FILE = "/storage/HANADB/51057281.ZIP"
+KIT_SAPHANA_FILE = "/storage/HANADB/SP07/Rev73/51057281.ZIP"
 # SAP HANA Installation kit path
 # Validated SAP HANA versions for S/4HANA 2023 on Red Hat 8: HANA 2.0 SP 7 Rev 73, kit file: 51057281.ZIP
 # Validated SAP HANA versions for S/4HANA 2022, 2021, 2020 on Red Hat 8: HANA 2.0 SP 5 Rev 57, kit file: 51056441.ZIP
-# Example for Red Hat 8: KIT_SAPHANA_FILE = "/storage/HANADB/51056441.ZIP"
+# Example for Red Hat 8: KIT_SAPHANA_FILE = "/storage/HANADB/SP07/Rev73/51057281.ZIP"
 
 ##########################################################
 # SAP system configuration
 ##########################################################
 
-SAP_SID = "DEV"
+SAP_SID = "S4A"
 # SAP System ID
 # Obs. This will be used  also as identification number across different HA name resources. Duplicates are not allowed.
 

@@ -47,8 +47,8 @@ variable "REGION" {
 	type		= string
 	description	= "The cloud region where to deploy the solution. The regions and zones for VPC are available here: https://cloud.ibm.com/docs/containers?topic=containers-regions-and-zones#zones-vpc. Supported locations in IBM Cloud Schematics: https://cloud.ibm.com/docs/schematics?topic=schematics-locations."
 	validation {
-		condition     = contains(["au-syd", "jp-osa", "jp-tok", "eu-de", "eu-gb", "ca-tor", "us-south", "us-east", "br-sao"], var.REGION )
-		error_message = "The REGION must be one of: au-syd, jp-osa, jp-tok, eu-de, eu-gb, ca-tor, us-south, us-east, br-sao."
+		condition     = contains(["eu-de", "eu-gb", "us-south", "us-east", "ca-tor", "au-syd", "jp-osa", "jp-tok", "eu-es", "br-sao"], var.REGION )
+		error_message = "The REGION must be one of: eu-de, eu-gb, us-south, us-east, ca-tor, au-syd, jp-osa, jp-tok, eu-es, br-sao."
 	}
 }
 
@@ -65,7 +65,7 @@ variable "ZONE_1" {
 	type		= string
 	description	= "Availability zone for DB_HOSTNAME_1 and APP_HOSTNAME_1 VSIs, in the same VPC. Supported zones: https://cloud.ibm.com/docs/containers?topic=containers-regions-and-zones#zones-vpc"
 	validation {
-		condition     = length(regexall("^(eu-de|eu-gb|us-south|us-east)-(1|2|3)$", var.ZONE_1)) > 0
+		condition     = length(regexall("^(eu-de|eu-gb|us-south|us-east|ca-tor|au-syd|jp-osa|jp-tok|eu-es|br-sao)-(1|2|3)$", var.ZONE_1)) > 0
 		error_message = "The ZONE is not valid."
 	}
 }
@@ -83,7 +83,7 @@ variable "ZONE_2" {
 	type		= string
 	description	= "Availability zone for DB_HOSTNAME_2 and APP_HOSTNAME_2 VSIs, in the same VPC. Supported zones: https://cloud.ibm.com/docs/containers?topic=containers-regions-and-zones#zones-vpc. If the same value as for ZONE_1 is used, and the value for SUBNET_1 is the same with the value for SUBNET_2, the deployment will be done in a single zone. If the values for ZONE_1, SUBNET_1 are different than the ones for ZONE_2, SUBNET_2 then an SAP Multizone deployment will be done."
 	validation {
-		condition     = length(regexall("^(eu-de|eu-gb|us-south|us-east)-(1|2|3)$", var.ZONE_2)) > 0
+		condition     = length(regexall("^(eu-de|eu-gb|us-south|us-east|ca-tor|au-syd|jp-osa|jp-tok|eu-es|br-sao)-(1|2|3)$", var.ZONE_2)) > 0
 		error_message = "The ZONE is not valid."
 	}
 }
@@ -110,7 +110,7 @@ variable "DOMAIN_NAME" {
 	type		= string
 	description	= "The Domain Name used for DNS and ALB. Duplicates are not allowed. The list with DNS resources can be found here: https://cloud.ibm.com/resources."
 	nullable = false
-	default = "example.com"
+	default = "ha.mzexample.com"
 	validation {
 		condition     =  length(var.DOMAIN_NAME) > 2  && length (regex("^[a-z]*||^[0-9]*||\\.||\\-", var.DOMAIN_NAME)) > 0  && length (regex("[\\.]", var.DOMAIN_NAME)) > 0  && length (regexall("[\\&]|[\\%]|[\\!]|[\\@]|[\\#]|[\\*]|[\\^]", var.DOMAIN_NAME)) == 0
 		error_message = "The DOMAIN_NAME variable should not be empty and must contain at least one \".\" as a separator and no special chars are allowed."
@@ -189,7 +189,7 @@ variable "DB_PROFILE" {
 variable "DB_IMAGE" {
 	type		= string
 	description = "The OS image for the HANA VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains the required SAP and HA subscriptions. A list of images is available here: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images."
-	default		= "ibm-redhat-8-6-amd64-sap-hana-5"
+	default		= "ibm-redhat-8-6-amd64-sap-hana-6"
 }
 
 variable "DB_HOSTNAME_1" {
@@ -230,7 +230,7 @@ variable "APP_PROFILE" {
 variable "APP_IMAGE" {
 	type		= string
 	description = "The OS image for the APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains the required SAP and HA subscriptions. A list of images is available here: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images."
-	default		= "ibm-redhat-8-6-amd64-sap-hana-5"
+	default		= "ibm-redhat-8-6-amd64-sap-hana-6"
 }
 
 variable "APP_HOSTNAME_1" {
@@ -372,16 +372,6 @@ variable "USRSAP_TRANS" {
 }
 
 ##############################################################
-# The variables used in Activity Tracker service.
-##############################################################
-
-variable "ATR_NAME" {
-  type        = string
-  description = "The name of the EXISTING Activity Tracker instance, in the same region as HANA VSI. The list of available Activity Tracker is available here: https://cloud.ibm.com/observe/activitytracker"
-  default     = ""
-}
-
-##############################################################
 # The variables and data sources used in SAP Ansible Modules.
 ##############################################################
 
@@ -489,7 +479,7 @@ variable "HANA_COMPONENTS" {
 variable "KIT_SAPHANA_FILE" {
 	type		= string
 	description = "Path to SAP HANA ZIP file, as downloaded from SAP Support Portal."
-	default		= "/storage/HANADB/51057281.ZIP"
+	default		= "/storage/HANADB/SP07/Rev73/51057281.ZIP"
 }
 
 variable "SAP_SID" {
@@ -584,25 +574,4 @@ variable "KIT_S4HANA_EXPORT" {
 	type		= string
 	description = "Path to S/4HANA Installation Export dir. The archives downloaded from SAP Support Portal should be present in this path."
 	default		= "/storage/S4HANA/2023"
-}
-
-locals {
-	ATR_ENABLE = true
-}
-
-resource "null_resource" "check_atr_name" {
-  count             = local.ATR_ENABLE == true ? 1 : 0
-  lifecycle {
-    precondition {
-      condition     = var.ATR_NAME != "" && var.ATR_NAME != null
-      error_message = "The name of an EXISTENT Activity Tracker in the same region must be specified."
-    }
-  }
-}
-
-data "ibm_resource_instance" "activity_tracker" {
-  count             = local.ATR_ENABLE == true ? 1 : 0
-  name              = var.ATR_NAME
-  location          = var.REGION
-  service           = "logdnaat"
 }

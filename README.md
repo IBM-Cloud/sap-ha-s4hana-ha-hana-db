@@ -51,8 +51,6 @@ Notes:
 - The list of EXISTING Subnets is available here: https://cloud.ibm.com/vpc-ext/network/subnets.
 - Each Subnet must have Internet access throught a  Public Gateway.
 
-In order to track the events specific to the resources deployed by this solution, the [IBM Cloud Activity Tracker](https://cloud.ibm.com/docs/activity-tracker?topic=activity-tracker-getting-started#gs_ov) to be used should be specified. IBM Cloud Activity Tracker service collects and stores audit records for API calls made to resources that run in the IBM Cloud. It can be used to monitor the activity of your IBM Cloud account, investigate abnormal activity and critical actions, and comply with regulatory audit requirements. In addition, you can be alerted on actions as they happen.
-
 ## Contents:
 
 - [1.1 Installation media](#11-installation-media)
@@ -95,6 +93,9 @@ For example, in case of deploying a HANA VM, using the default value for VSI pro
     - `<sid>_hana_shared` - size 256 GB
 - 1 volume x 50 GB for `/usr/sap` (volume group: `<sid>_usr_sap_vg`, logical volume: `<sid>_usr_sap_lv`)
 - 1 volume x 10 GB for a 2 GB SWAP logical volume (volume group: `<sid>_swap_vg`, logical volume: `<sid>_swap_lv`)
+
+SAP APPs VSI Disks:
+- 1 disk with 10 IOPS / GB - SWAP (the size depends on the OS profile used, for `bx2-4x16` the size will be 48 GB)
 
 ## 1.4 VPC Configuration
 
@@ -141,12 +142,6 @@ SHARE SIZES | Custom File Shares Sizes for SAP mounts. Sample values:  USRSAP_SA
 DB_PROFILE | The instance profile used for the HANA VSI. The list of certified profiles for HANA VSIs is available here. <br> Details about all x86 instance profiles are available here. <br> For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud <br> Default value: DB_PROFILE = "mx2-16x128"
 APP_PROFILE | The profile used for the APP VSI. A list of profiles is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles).<br> For more information about supported OS and IBM Gen 2 Virtual Server Instances (VSI), check [SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud](https://launchpad.support.sap.com/#/notes/2927211)<br/> Default value: APP_PROFILE = "bx2-4x16".
 [DB/APP]_IMAGE | The OS image used for the HANA/APP VSI. You must use the Red Hat Enterprise Linux 8 for SAP HANA (amd64) image for all VMs as this image contains  the required SAP and HA subscriptions.  A list of images is available [here](https://cloud.ibm.com/docs/vpc?topic=vpc-about-images)  <br/> Default value: "ibm-redhat-8-6-amd64-sap-hana-5"
-
-**Activity Tracker input parameters:**
-
-Parameter | Description
-----------|------------
-ATR_NAME | The name of the EXISTING Activity Tracker instance, in the same region chosen for SAP system deployment. The list of available Activity Tracker is available [here](https://cloud.ibm.com/observe/activitytracker)
 
 **SAP input parameters:**
 
@@ -219,8 +214,8 @@ HANA DB | 2.0 SPS07 rev73 | 51057281.ZIP
 
 OS version | Image | Role
 -----------|-----------|-----------
-Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-5 | DB/APP
-Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-9 | DB/APP
+Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-6 | DB/APP
+Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-10 | DB/APP
 
 ---
 S/4HANA 2022
@@ -241,8 +236,8 @@ HANA DB | 2.0 SPS07 rev73 | 51057281.ZIP
 
 OS version | Image | Role
 -----------|-----------|-----------
-Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-5 | DB/APP
-Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-9 | DB/APP
+Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-6 | DB/APP
+Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-10 | DB/APP
 
 ---
 S/4HANA 2021
@@ -263,8 +258,8 @@ HANA DB | 2.0 SPS07 rev73 | 51057281.ZIP
 
 OS version | Image | Role
 -----------|-----------|-----------
-Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-5 | DB/APP
-Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-9 | DB/APP
+Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-6 | DB/APP
+Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-10 | DB/APP
 
 ---
 S/4HANA 2020
@@ -279,14 +274,14 @@ SAP IGS | 7.81 PL 3 | igsexe_3-70005417.sar
 SAP IGS HELPER | PL 17 | igshelper_17-10010245.sar
 SAP HOST AGENT | 7.22 SP61 | SAPHOSTAGENT61_61-80004822.SAR
 HANA CLIENT | 2.17 | IMDB_CLIENT20_017_22-80002082.SAR
-HANA DB | 2.0 SPS05 rev59.05 | 51056441.ZIP
+HANA DB | 2.0 SPS07 rev73 | 51057281.ZIP
 
 **OS images validated for this solution:**
 
 OS version | Image | Role
 -----------|-----------|-----------
-Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-4 | DB/APP
-Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-7 | DB/APP
+Red Hat Enterprise Linux 8.6 for SAP HANA (amd64) | ibm-redhat-8-6-amd64-sap-hana-6 | DB/APP
+Red Hat Enterprise Linux 8.4 for SAP HANA (amd64) | ibm-redhat-8-4-amd64-sap-hana-10 | DB/APP
 
 **Terraform version used to validate this solution:**
 
@@ -459,15 +454,14 @@ DB_HOSTNAME_2 = "hanadb-2"
 # Default value: "hanadb-2"
 # When the default value is used, the virtual hostname will automatically be changed based on <HANA_SID> to "hanadb-<hana_sid>-2"
 
-
 DB_PROFILE = "mx2-16x128"
 # The instance profile used for the HANA VSI. The list of certified profiles for HANA VSIs: https://cloud.ibm.com/docs/sap?topic=sap-hana-iaas-offerings-profiles-intel-vs-vpc
 # Details about all x86 instance profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles).
 # For more information about supported DB/OS and IBM Gen 2 Virtual Server Instances (VSI), check [SAP Note 2927211: SAP Applications on IBM Virtual Private Cloud](https://launchpad.support.sap.com/#/notes/2927211) 
 # Default value: "mx2-16x128"
 
-DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-5"
-# OS image for DB VSI. Supported OS images for DB VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-9
+DB_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-6"
+# OS image for DB VSI. OS images validated for DB VSIs: ibm-redhat-8-6-amd64-sap-hana-6, ibm-redhat-8-4-amd64-sap-hana-10
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
 # Example: DB_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-9" 
 
@@ -488,18 +482,10 @@ APP_HOSTNAME_2 = "sapapp-2"
 APP_PROFILE = "bx2-4x16"
 # The APP VSI profile. Supported profiles: bx2-4x16. The list of available profiles: https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
-APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-5"
-# OS image for SAP APP VSI. Supported OS images for APP VSIs: ibm-redhat-8-6-amd64-sap-hana-5, ibm-redhat-8-4-amd64-sap-hana-9.
+APP_IMAGE = "ibm-redhat-8-6-amd64-sap-hana-6"
+# OS image for SAP APP VSI. OS images validated for APP VSIs: ibm-redhat-8-6-amd64-sap-hana-6, ibm-redhat-8-4-amd64-sap-hana-10.
 # The list of available VPC Operating Systems supported by SAP: SAP note '2927211 - SAP Applications on IBM Virtual Private Cloud (VPC) Infrastructure environment' https://launchpad.support.sap.com/#/notes/2927211; The list of all available OS images: https://cloud.ibm.com/docs/vpc?topic=vpc-about-images
 # Example: APP_IMAGE = "ibm-redhat-8-4-amd64-sap-hana-9" 
-
-##########################################################
-# Activity Tracker variables:
-##########################################################
-
-ATR_NAME = "Activity-Tracker-SAP-eu-de"
-# The name of the EXISTING Activity Tracker instance, in the same region chosen for SAP system deployment.
-# Example: ATR_NAME="Activity-Tracker-SAP-eu-de"
 
 ##########################################################
 # S/4HANA version
@@ -530,17 +516,17 @@ HANA_COMPONENTS = "server"
 # SAP HANA Components. Default: server. Supported values: all, client, es, ets, lcapps, server, smartda, streaming, rdsync, xs, studio, afl, sca, sop, eml, rme, rtl, trp
 # Example: HANA_COMPONENTS = "server"
 
-KIT_SAPHANA_FILE = "/storage/HANADB/51057281.ZIP"
+KIT_SAPHANA_FILE = "/storage/HANADB/SP07/Rev73/51057281.ZIP"
 # SAP HANA Installation kit path
 # Validated SAP HANA versions for S/4HANA 2023 on Red Hat 8: HANA 2.0 SP 7 Rev 73, kit file: 51057281.ZIP
 # Validated SAP HANA versions for S/4HANA 2022, 2021, 2020 on Red Hat 8: HANA 2.0 SP 5 Rev 57, kit file: 51056441.ZIP
-# Example for Red Hat 8: KIT_SAPHANA_FILE = "/storage/HANADB/51056441.ZIP"
+# Example for Red Hat 8: KIT_SAPHANA_FILE = "/storage/HANADB/SP07/Rev73/51057281.ZIP"
 
 ##########################################################
 # SAP system configuration
 ##########################################################
 
-SAP_SID = "DEV"
+SAP_SID = "S4A"
 # SAP System ID
 # Obs. This will be used  also as identification number across different HA name resources. Duplicates are not allowed.
 
